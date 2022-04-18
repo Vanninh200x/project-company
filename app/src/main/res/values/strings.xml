@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">appNote_3</string>
+
+    <string name="main_title">Ghi chú</string>.
+    <string name="action_plus">Plus</string>
+    <string name="find_main_hint">Tìm kiếm</string>
+
+    <string name="menu_editPasswd">Cài đặt mật khẩu</string>
+    <string name="menu_editNotifi">Cài đặt thông báo</string>
+    <string name="menu_deleteNote">Xóa hết ghi chú</string>
+
+    <string name="add_ac_title">Tạo ghi chú</string>
+    <string name="editText_title">Tiêu đề</string>
+    <string name="editText_NoiDung">Nội dung</string>
+    <string name="editText_Time">Hẹn giờ</string>
+
+    <string name="button_chonngay">Chọn ngày</string>
+    <string name="button_chongio">Chọn giờ</string>
+
+    <string name="one_note_demo_tile">Họp ban quản lý</string>
+    <string name="one_note_demo_content">Đem tài liệu về nhà thầu</string>
+    <string name="one_note_demo_day">20 tháng 04 năm 2020</string>
+    <string name="one_note_demo_time">15:30</string>
+
+    <string name="detail_ac_header_title">Chi tiết</string>
+    <string name="detail_more_update_info">Cập nhật lần cuối: 31 Tháng 3 2022 14:36:32</string>
+
+
+    <string name="menu_title_share">Chia sẻ</string>
+    <string name="menu_title_edit">Sửa</string>
+    <string name="menu_title_delete">Xóa</string>
+    <string name="editNote_title">Sửa ghi chú</string>
+
+    <string name="textView_WhenImgNull_demo">H</string>
+    <string name="edit_passwd">Cài đặt mặt khẩu</string>
+    <string name="ediit_passwd_more">Vui lòng nhập một mật khẩu truy cập cho Ghi chú. Lưu ý rằng quên mật khẩu này, bạn sẽ không thể truy cập ứng dụng</string>
+    <string name="editpasswd_1">Nhập mật khẩu</string>
+    <string name="editpasswd_2">Nhập lại mật khẩu</string>
+
+    <string name="edit_notifi">Cài đặt thông báo</string>
+    <string name="edit_notifi_voice">Âm báo</string>
+    <string name="edit_notifi_buzz">Rung</string>
+    <string name="edit_notifi_lamp">Đèn báo</string>
+    <string name="text_btn_login">Đăng nhập</string>
+
+</resources>

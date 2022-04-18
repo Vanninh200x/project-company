@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Add_Activity">
+
+
+    <RelativeLayout
+        android:id="@+id/id_rela_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/id_textV_editPasswd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="48dp"
+            android:layout_marginEnd="48dp"
+            android:gravity="center"
+            android:text="@string/edit_notifi"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/id_ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:backgroundTint="@color/black"
+            android:contentDescription="@null"
+            android:padding="14dp"
+            android:src="@drawable/ic_back" />
+    </RelativeLayout>
+
+
+    <FrameLayout
+        android:id="@+id/id_framelayout_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/id_rela_layout"
+        android:layout_marginTop="50dp">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/id_rela_layout"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:enabled="false"
+            android:text="@string/edit_notifi_voice"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:id="@+id/id_imgV_uncheck_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="24dp"
+            android:src="@drawable/ic_checkbox_uncheck" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/id_framelayout_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/id_framelayout_1">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/id_rela_layout"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:enabled="false"
+            android:text="@string/edit_notifi_buzz"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:id="@+id/id_imgV_uncheck_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="24dp"
+            android:src="@drawable/ic_checkbox_uncheck" />
+
+    </FrameLayout>
+
+    <FrameLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/id_framelayout_2"
+        >
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/id_rela_layout"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:enabled="false"
+            android:text="@string/edit_notifi_lamp"
+            android:textColor="@color/black" />
+
+        <ImageView
+            android:id="@+id/id_imgV_uncheck_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="24dp"
+            android:src="@drawable/ic_checkbox_uncheck" />
+
+    </FrameLayout>
+
+
+</RelativeLayout>

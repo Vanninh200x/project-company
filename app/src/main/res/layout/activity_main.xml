@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:id="@+id/id_drawerlayout"
     tools:openDrawer="start"
     tools:context=".MainActivity">
@@ -54,32 +55,43 @@
         </RelativeLayout>
 
 
-        <ImageView
-            android:id="@+id/id_imgV_main_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/id_rela_layout"
-            android:layout_marginTop="10dp"
-            android:padding="20dp"
-            android:src="@drawable/ic_search" />
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/id_edt_search"
+        <FrameLayout
+            android:id="@+id/id_framelayout_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/id_rela_layout"
-            android:layout_marginTop="20dp"
-            android:layout_toRightOf="@id/id_imgV_main_search"
-            android:hint="@string/find_main_hint"
-            android:textSize="20dp" />
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:id="@+id/id_imgV_main_search"
+                android:layout_width="wrap_content"
+                android:padding="16dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/id_rela_layout"
+                android:src="@drawable/ic_search" />
+
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@+id/id_edt_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/id_rela_layout"
+                android:hint="@string/find_main_hint"
+                android:textColor="@color/black" />
+
+
+        </FrameLayout>
 
 
         <ListView
             android:id="@+id/id_list_View"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/id_imgV_main_search"
-            android:layout_alignParentBottom="true" />
+            android:layout_below="@+id/id_framelayout_1"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="10dp" />
 
     </RelativeLayout>
 

@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp"
     tools:context=".Detail_Activity">
 
     <RelativeLayout
@@ -56,11 +55,27 @@
             android:src="@drawable/ic_done" />
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/id_img_detail"
-        android:layout_width="125px"
-        android:layout_height="125px"
-        android:layout_below="@+id/id_rela_layout" />
+    <RelativeLayout
+        android:layout_marginStart="14dp"
+        android:id="@+id/id_rlv_img"
+        android:layout_below="@+id/id_rela_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/id_img_detail"
+            android:layout_width="125px"
+            android:layout_height="125px"
+            android:scaleType="centerCrop" />
+
+        <include
+            android:id="@+id/id_include_imgNull_detail"
+            android:visibility="gone"
+            android:layout_width="125px"
+            layout="@layout/img_when_null"
+            android:layout_height="125px"></include>
+
+    </RelativeLayout>
 
     <EditText
 
@@ -69,7 +84,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/id_rela_layout"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/id_img_detail"
+        android:layout_toRightOf="@+id/id_rlv_img"
         android:enabled="false"
         android:hint="@string/one_note_demo_tile"
         android:padding="10dp"
@@ -82,7 +97,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/id_title_detail_ac"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/id_img_detail"
+        android:layout_toRightOf="@+id/id_rlv_img"
         android:enabled="false"
         android:hint="@string/one_note_demo_content"
         android:padding="10dp"
@@ -90,13 +105,13 @@
         android:textSize="20sp" />
 
     <RelativeLayout
-        android:padding="12dp"
-        android:visibility="visible"
         android:id="@+id/rlv_Clock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/id_detail_content"
-        android:layout_toRightOf="@+id/id_img_detail">
+        android:layout_toRightOf="@+id/id_rlv_img"
+        android:padding="12dp"
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/id_imgV_clock"
@@ -105,22 +120,11 @@
             android:padding="15dp"
             android:src="@drawable/ic_clock" />
 
-        <EditText
-            android:id="@+id/id_detail_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/id_imgV_clock"
-            android:enabled="false"
-            android:hint="@string/one_note_demo_time"
-            android:padding="4dp"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
 
-        <EditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/id_detail_day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/id_detail_time"
             android:layout_toRightOf="@+id/id_imgV_clock"
             android:enabled="false"
             android:hint="@string/one_note_demo_day"
@@ -128,11 +132,25 @@
             android:textColor="@color/black"
             android:textSize="20sp" />
 
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/id_detail_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/id_detail_day"
+            android:layout_toRightOf="@+id/id_imgV_clock"
+            android:enabled="false"
+            android:hint="@string/one_note_demo_time"
+            android:padding="4dp"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+
         <TextView
             android:id="@+id/id_detail_update_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/id_detail_day"
+            android:layout_below="@+id/id_detail_time"
             android:layout_marginTop="20dp"
 
             android:clickable="false"
@@ -147,69 +165,66 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/id_detail_content"
-        android:layout_toRightOf="@+id/id_img_detail"
+        android:layout_toRightOf="@+id/id_rlv_img"
         android:visibility="gone">
 
-        <RelativeLayout
-            android:id="@+id/rlv_edt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp">
-
-            <ImageView
-                android:id="@+id/id_checktime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:padding="15dp"
-                android:src="@drawable/ic_checkbox_uncheck" />
-
-            <EditText
-                android:enabled="false"
-                android:id="@+id/id_edt_Time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/id_checktime"
-                android:layout_alignBottom="@+id/id_checktime"
-                android:layout_toStartOf="@+id/id_checktime"
-                android:hint="@string/editText_Time"
-                android:padding="15dp"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_marginLeft="10dp"
+        <FrameLayout
+            android:id="@+id/id_framelayout_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/rlv_edt"
+            >
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:layout_marginStart="10dp"
+                android:id="@+id/id_edit_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/id_rela_layout"
+                android:enabled="false"
+                android:text="@string/editText_Time"
+                android:textColor="@color/black" />
+
+            <ImageView
+                android:layout_marginEnd="5dp"
+                android:id="@+id/id_imgV_uncheck_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/ic_checkbox_uncheck" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_below="@id/id_framelayout_1"
+            android:layout_marginStart="10dp"
+            android:weightSum="10"
+            android:layout_width="match_parent"
             android:orientation="horizontal"
-            android:weightSum="10">
+            android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:backgroundTint="@color/white"
-                android:visibility="gone"
-                android:onClick="openDatePicker"
                 android:id="@+id/id_btn_chonngay"
+                android:onClick="openDatePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:text="@string/button_chonngay"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"/>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:backgroundTint="@color/white"
-                android:visibility="gone"
-                android:onClick="popTimePicker"
                 android:id="@+id/id_btn_chongio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"
+                android:onClick="popTimePicker"
+                android:backgroundTint="@color/white"
                 android:text="@string/button_chongio"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:layout_width="wrap_content"
+                android:layout_weight="5"
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
+
     </RelativeLayout>
 
 

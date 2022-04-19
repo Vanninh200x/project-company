@@ -80,26 +80,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <LinearLayout
-
+    <FrameLayout
+        android:id="@+id/id_framelayout_1"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/id_rela_layout"
+        >
+
       <androidx.appcompat.widget.AppCompatEditText
-          android:layout_weight="9"
-          android:id="@+id/id_edt_hengio"
-          android:hint="@string/editText_Time"
-          android:enabled="false"
+          android:id="@+id/id_edit_time"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"/>
+          android:layout_height="wrap_content"
+          android:layout_below="@id/id_rela_layout"
+          android:enabled="false"
+          android:text="@string/editText_Time"
+          android:textColor="@color/black" />
 
       <ImageView
-          android:id="@+id/id_img_icon_choose"
+          android:layout_marginEnd="5dp"
+          android:id="@+id/id_imgV_uncheck_1"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:padding="10dp"
+          android:layout_gravity="end"
+          android:layout_marginTop="12dp"
+
           android:src="@drawable/ic_checkbox_uncheck" />
-    </LinearLayout>
+
+    </FrameLayout>
 
     <LinearLayout
         android:weightSum="10"

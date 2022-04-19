@@ -2,7 +2,7 @@ package com.example.appnote_3;
 
 public class oneNote_class {
     private int id;
-    private String textV_title, textV_content, textV_time, textV_day;
+    private String textV_title, textV_content, textV_day, textV_time;
     private byte[] img_font;
 
 
@@ -14,12 +14,12 @@ public class oneNote_class {
         this.id = id;
     }
 
-    public oneNote_class(int id,String textV_title, String textV_content, String textV_time, String textV_day, byte[] img_font) {
+    public oneNote_class(int id,String textV_title, String textV_content, String textV_day, String textV_time, byte[] img_font) {
         this.id = id;
         this.textV_title = textV_title;
         this.textV_content = textV_content;
-        this.textV_time = textV_time;
         this.textV_day = textV_day;
+        this.textV_time = textV_time;
         this.img_font = img_font;
     }
 

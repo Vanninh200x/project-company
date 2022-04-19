@@ -96,9 +96,9 @@ public class AdapterNote extends BaseAdapter {
         } else {
             holder.imageView_img.setVisibility(View.GONE);
             holder.rlvNull.setVisibility(View.VISIBLE);
-//            char s = note.getTextV_title().charAt(0);
-//            holder.textView_wImg_Null.setText(s);
-//            Log.d("KIEMTRA", note.getTextV_title() + "");
+            char s = note.getTextV_title().charAt(0);
+            holder.textView_wImg_Null.setText(String.valueOf(s));
+            Log.d("KIEMTRA_TV", s + "");
         }
         return view;
     }

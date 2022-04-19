@@ -2,6 +2,7 @@ package com.example.appnote_3;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -35,17 +36,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    final String DATABASE_NAME = "appNote.db";
-    SQLiteDatabase database;
-    ImageView imgV_menu, imgV_Plus, imgV_search, imageView_clock;
-    EditText editText_Search;
+    private final String DATABASE_NAME = "appNote.db";
+    private SQLiteDatabase database;
+    private ImageView imgV_menu, imgV_Plus, imgV_search, imageView_clock;
+    private EditText editText_Search;
 
-    ListView listView;
-    ArrayList<oneNote_class> list;
-    AdapterNote adapter;
+    private ListView listView;
+    private ArrayList<oneNote_class> list;
+    private AdapterNote adapter;
 
-    NavigationView navigationView;
-    DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
 
     private int id = -1;
     private static final String SHARE_PRE_NAME = "mypref";
@@ -57,17 +58,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private EditText editText_passswd_loginAC;
     private TextInputLayout textInputLayout;
     private Button button_login_loginAC;
+    private static int CHECK_OPEN_MAINAC_ONETIME=0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        co van de
         database = Database.initDatabase(this, DATABASE_NAME);
-
         sharedPreferences = getSharedPreferences(SHARE_PRE_NAME, MODE_PRIVATE);
         passwd_App = sharedPreferences.getString(KEY_PASS, "");
-        if (passwd_App.length() > 0) {
+        if (passwd_App.length() > 0 && CHECK_OPEN_MAINAC_ONETIME == 0 ) {
             setContentView(R.layout.activity_login);
             initLogin();
             button_login_loginAC.setOnClickListener(new View.OnClickListener() {
@@ -75,12 +75,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onClick(View view) {
                     String realPass = sharedPreferences.getString(KEY_PASS, "");
                     String passInput = editText_passswd_loginAC.getText().toString().trim();
-
                     if (passInput.equals(realPass)) {
+                        CHECK_OPEN_MAINAC_ONETIME++;
+                        Log.d("CHECK_KQ_1", CHECK_OPEN_MAINAC_ONETIME +"");
                         setContentView(R.layout.activity_main);
                         init();
                         read();
                         initClick();
+                        Log.d("CHECK_PO", CHECK_OPEN_MAINAC_ONETIME +"");
                     } else {
                         textInputLayout.setErrorEnabled(false);
                         textInputLayout.setError("Sai mật khẩu");
@@ -111,8 +113,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //    }
 
     private void initClick() {
-
-
         imgV_Plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,7 +149,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     b.compress(Bitmap.CompressFormat.JPEG, 50, bs);
                     bundle.putByteArray("img", bs.toByteArray());
                 } else {
-//
+                    bundle.putByteArray("img", new byte[]{
+                    });
                 }
 
                 intent.putExtra("dulieu", bundle);
@@ -157,14 +158,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-//        Button Search
-//        imgV_search.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String s = editText_Search.getText().toString();
-//
-//            }
-//        });
 
         editText_Search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -187,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //    FILTER : SEARCH
     private void filter(String text) {
         ArrayList<oneNote_class> filterList = new ArrayList<>();
-
         for (oneNote_class oneNote : list) {
             if (oneNote.getTextV_title().toLowerCase().contains(text.toLowerCase())) {
                 filterList.add(oneNote);
@@ -208,9 +200,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         imgV_search = findViewById(R.id.id_imgV_main_search);
         editText_Search = findViewById(R.id.id_edt_search);
 
-        imgV_menu.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
-        imgV_Plus.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
-        imgV_search.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
+
+        imgV_menu.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
+        imgV_Plus.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
+        imgV_search.setColorFilter(Color.parseColor("#999999"), PorterDuff.Mode.SRC_IN);
 
 //
 //        Init layoutDrawer
@@ -255,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent1);
                 break;
             case R.id.id_item_deleteAll:
-                SQLiteDatabase database = Database.initDatabase(this, "appNote.db");
+//                SQLiteDatabase database = Database.initDatabase(this, "appNote.db");
 //
                 database.delete("ghichu", null, null);
                 finish();

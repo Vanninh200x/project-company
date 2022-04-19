@@ -46,14 +46,15 @@ public class Detail_Activity extends AppCompatActivity {
     private final int REQUEST_CHOOSE_PHOTO = 123;
     private ImageView imageView_back, imageView_more, imageView_img_dd, imageView_clock, imageView_done, imageView_unCheck_detail;
     private EditText editText_title, editText_content, editText_time, editText_day;
-    private TextView textView_update_info, textView_title_detail_edit;
+    private TextView textView_update_info, textView_title_detail_edit, textView_title_img_null;
     private EditText editText_clock;
-    private RelativeLayout rlvClock, rlvChecktime;
+    private RelativeLayout rlvClock, rlvChecktime, rlv_img_parent, rlv_img_null;
     private Button buttonTime, buttonDay;
     private DatePickerDialog datePickerDialog;
     private int hour, minute;
     private int id;
     private SQLiteDatabase database;
+    private byte[] img;
 
 
     @Override
@@ -63,7 +64,7 @@ public class Detail_Activity extends AppCompatActivity {
         database = Database.initDatabase(this, DATABASE_NAME);
 
         init();
-        initUI();
+        initId();
         initDataPicker();
 
         Intent intent = getIntent();
@@ -76,14 +77,26 @@ public class Detail_Activity extends AppCompatActivity {
             id = Integer.parseInt(bundle.getString("id"));
 //            Toast.makeText(this, id + "", Toast.LENGTH_SHORT).show();
 
-            byte[] img = bundle.getByteArray("img");
-//            Lỗi không có ảnh ? => ko decode => Length NULL: 14/4
-            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
-            imageView_img_dd.setImageBitmap(bitmap);
+//            byte[] img;
+            img = bundle.getByteArray("img");
+            if (img.length > 0) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+                imageView_img_dd.setImageBitmap(bitmap);
+            } else {
+                char s = title.charAt(0);
+                textView_title_img_null.setTextSize(25);
+                textView_title_img_null.setText(String.valueOf(s));
+
+                imageView_img_dd.setVisibility(View.GONE);
+                rlv_img_null.setVisibility(View.VISIBLE);
+            }
+//            Lỗi không có ảnh ? => ko decode => Length NULL: 14/4 Fix 19/4
+
             editText_title.setText(title);
             editText_content.setText(content);
-            editText_time.setText(time);
             editText_day.setText(day);
+            editText_time.setText(time);
+
         }
 
 
@@ -115,23 +128,43 @@ public class Detail_Activity extends AppCompatActivity {
                                 imageView_more.setVisibility(View.GONE);
                                 rlvChecktime.setVisibility(View.VISIBLE);
                                 imageView_done.setVisibility(View.VISIBLE);
+                                imageView_unCheck_detail.setImageResource(R.drawable.ic_checkbox_checked);
+                                buttonTime.setVisibility(View.VISIBLE);
+                                buttonDay.setVisibility(View.VISIBLE);
+                                buttonTime.setText(editText_time.getText().toString());
+                                buttonDay.setText(editText_day.getText().toString());
                                 editText_title.setEnabled(true);
                                 editText_content.setEnabled(true);
                                 editText_clock.setEnabled(true);
                                 editText_clock.setFocusable(false);
                                 textView_title_detail_edit.setText("Sửa ghi chú");
 
-//                               ImgageDD Click
-                                imageView_img_dd.setOnClickListener(new View.OnClickListener() {
+//                              ImgageDD Click
+
+//                                imageView_img_dd.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View view) {
+//                                    }
+//                                });
+//
+                                rlv_img_parent.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        choosePhoto();
+                                        if (img.length != 0) {
+                                            choosePhoto();
+                                        }
+                                        if (img.length == 0) {
+                                            choosePhoto();
+                                            imageView_img_dd.setVisibility(View.VISIBLE);
+                                        }
                                     }
                                 });
+
 
 //                                Button Check
                                 imageView_unCheck_detail.setOnClickListener(new View.OnClickListener() {
                                     boolean flag = false;
+
 
                                     @Override
                                     public void onClick(View view) {
@@ -188,14 +221,13 @@ public class Detail_Activity extends AppCompatActivity {
         contentValues.put("time", time);
         contentValues.put("img", img);
 
-
-        Log.d("ID_CHECK", id + "");
-        try {
-            long kq = database.update("ghichu", contentValues, "id = ?", new String[]{id + ""});
+//        try {
+//        long kq =
+        database.update("ghichu", contentValues, "id = ?", new String[]{id + ""});
 //            Log.d("KQ_CHECK", kq + "");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
 
@@ -233,6 +265,7 @@ public class Detail_Activity extends AppCompatActivity {
                     InputStream is = getContentResolver().openInputStream(imgURI);
                     Bitmap bitmap = BitmapFactory.decodeStream(is);
                     imageView_img_dd.setImageBitmap(bitmap);
+                    rlv_img_null.setVisibility(View.GONE);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -242,9 +275,9 @@ public class Detail_Activity extends AppCompatActivity {
     }
 
 
-    private void initUI() {
+    private void initId() {
 
-        Intent intent = getIntent();
+//        Intent intent = getIntent();
 //        id = intent.getIntExtra("id",-1);
         Cursor cursor = database.rawQuery("SELECT * FROM ghichu WHERE id = ?", new String[]{id + ""});
         cursor.moveToFirst();
@@ -257,7 +290,10 @@ public class Detail_Activity extends AppCompatActivity {
         imageView_clock = findViewById(R.id.id_imgV_clock);
         imageView_img_dd = findViewById(R.id.id_img_detail);
         imageView_done = findViewById(R.id.id_ivDone);
-        imageView_unCheck_detail = findViewById(R.id.id_checktime);
+        imageView_unCheck_detail = findViewById(R.id.id_imgV_uncheck_1);
+
+        rlv_img_parent = findViewById(R.id.id_rlv_img);
+        rlv_img_null = findViewById(R.id.id_include_imgNull_detail);
 
         buttonTime = findViewById(R.id.id_btn_chongio);
         buttonDay = findViewById(R.id.id_btn_chonngay);
@@ -269,23 +305,27 @@ public class Detail_Activity extends AppCompatActivity {
 
         textView_update_info = findViewById(R.id.id_detail_update_info);
         textView_title_detail_edit = findViewById(R.id.id_tvTitle_AC_detail);
+        textView_title_img_null = findViewById(R.id.id_textView_wImg_Null);
 
         rlvClock = findViewById(R.id.rlv_Clock);
         rlvChecktime = findViewById(R.id.rlv_CheckTime);
 
-        editText_clock = findViewById(R.id.id_edt_Time);
+        editText_clock = findViewById(R.id.id_edit_time);
 //        Set Color
 
         imageView_clock.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
-        imageView_back.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
-        imageView_more.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
-        imageView_unCheck_detail.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
+        imageView_back.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
+        imageView_more.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
+        imageView_unCheck_detail.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
         imageView_done.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
     }
 
 
+
+
     public void openDatePicker(View view) {
         datePickerDialog.setTitle("Chọn ngày");
+//        datePickerDialog.getDatePicker();
         datePickerDialog.show();
     }
 

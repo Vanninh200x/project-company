@@ -30,6 +30,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -44,6 +45,11 @@ public class Add_Activity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private int hour, minute;
     private Uri uri = null;
+
+    private Calendar calendar = Calendar.getInstance();
+    private final int year = calendar.get(Calendar.YEAR);
+    private final int month = calendar.get(Calendar.MONTH);
+    private final int day = calendar.get(Calendar.DAY_OF_MONTH);
 
 
     @Override
@@ -98,6 +104,8 @@ public class Add_Activity extends AppCompatActivity {
                 finish();
             }
         });
+
+
     }
 
     //        Insert
@@ -115,11 +123,12 @@ public class Add_Activity extends AppCompatActivity {
         contentValues.put("time", time);
         if (uri != null) {
             byte[] img = getByteArrayFromImageView(imgV_img_add);
-                        Log.d("KIEMTRA_title", title + "");
 
             contentValues.put("img", img);
+
+//            Log.d("CHECK_IMG" , im)
         } else {
-            Toast.makeText(this, "BBB", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "BBB", Toast.LENGTH_SHORT).show();
             contentValues.put("img", new byte[]{});
         }
 
@@ -146,10 +155,10 @@ public class Add_Activity extends AppCompatActivity {
         imgV_back = findViewById(R.id.id_ivBack);
         imgV_done = findViewById(R.id.id_ivDone);
         imgV_img_add = findViewById(R.id.id_imgV_anh);
-        img_icon_check = findViewById(R.id.id_img_icon_choose);
+        img_icon_check = findViewById(R.id.id_imgV_uncheck_1);
         editText_title = findViewById(R.id.id_edt_title);
         editText_content = findViewById(R.id.id_edt_content);
-        editText_time = findViewById(R.id.id_edt_hengio);
+        editText_time = findViewById(R.id.id_edit_time);
         button_date = findViewById(R.id.id_btn_chonngay);
         button_time = findViewById(R.id.id_btn_chongio);
 
@@ -158,10 +167,10 @@ public class Add_Activity extends AppCompatActivity {
         button_time.setVisibility(View.GONE);
 
 //      SET COLOR
-        imgV_back.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
-        imgV_done.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
+        imgV_back.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
+        imgV_done.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
         imgV_img_add.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
-        img_icon_check.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
+        img_icon_check.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
 
     }
 
@@ -197,6 +206,7 @@ public class Add_Activity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, REQUEST_CHOOSE_PHOTO);
+        startActivityForResult(intent, REQUEST_CHOOSE_PHOTO);
     }
 
 
@@ -217,19 +227,18 @@ public class Add_Activity extends AppCompatActivity {
     private void initDataPicker() {
         DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int day, int month, int year) {
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
-                String date = makeDateString(year, month, day);
+                String date = makeDateString(day, month, year);
                 button_date.setText(date);
             }
         };
 
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR );
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        datePickerDialog = new DatePickerDialog(this, onDateSetListener, day, month, year);
+        datePickerDialog = new DatePickerDialog(this, onDateSetListener, year, month, day);
+
     }
+
+
 
     private String makeDateString(int day, int month, int year) {
         return day + " " + getMonthFormat(month) + " " + year;
@@ -280,6 +289,7 @@ public class Add_Activity extends AppCompatActivity {
     public void openDatePicker(View view) {
         datePickerDialog.setTitle("Chọn ngày");
         datePickerDialog.show();
+
     }
 
 }

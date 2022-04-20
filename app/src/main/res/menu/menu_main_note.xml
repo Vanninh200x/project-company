@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:checkableBehavior="single">
-        <item android:id="@+id/id_item_passwd"
-            android:icon="@drawable/ic_padlock"
-            android:title="@string/menu_editPasswd"/>
+                <item
+                    android:title="@string/menu_editPasswd"
+                    android:id="@+id/id_item_passwd"
+                    android:icon="@drawable/ic_padlock"/>
+                <item
+                    android:id="@+id/id_item_notification"
+                    android:icon="@drawable/ic_notification"
+                    android:title="@string/menu_editNotifi" />
+                <item
+                    android:id="@+id/id_item_deleteAll"
+                    android:icon="@drawable/ic_trash"
 
-        <item android:id="@+id/id_item_notification"
-            android:icon="@drawable/ic_notification"
-            android:title="@string/menu_editNotifi"/>
-
-        <item android:id="@+id/id_item_deleteAll"
-            android:icon="@drawable/ic_trash"
-            android:title="@string/menu_deleteNote"/>
+                    android:title="@string/menu_deleteNote" />
     </group>
 </menu>

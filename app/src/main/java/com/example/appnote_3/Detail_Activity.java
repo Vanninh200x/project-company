@@ -37,8 +37,11 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class Detail_Activity extends AppCompatActivity {
@@ -55,6 +58,8 @@ public class Detail_Activity extends AppCompatActivity {
     private int id;
     private SQLiteDatabase database;
     private byte[] img;
+    private Uri uri = null;
+    private static int count=0;
 
 
     @Override
@@ -64,7 +69,7 @@ public class Detail_Activity extends AppCompatActivity {
         database = Database.initDatabase(this, DATABASE_NAME);
 
         init();
-        initId();
+//        initId();
         initDataPicker();
 
         Intent intent = getIntent();
@@ -74,6 +79,7 @@ public class Detail_Activity extends AppCompatActivity {
             String content = bundle.getString("content");
             String time = bundle.getString("time");
             String day = bundle.getString("day");
+            String updatetime = bundle.getString("updatetime");
             id = Integer.parseInt(bundle.getString("id"));
 //            Toast.makeText(this, id + "", Toast.LENGTH_SHORT).show();
 
@@ -86,17 +92,15 @@ public class Detail_Activity extends AppCompatActivity {
                 char s = title.charAt(0);
                 textView_title_img_null.setTextSize(25);
                 textView_title_img_null.setText(String.valueOf(s));
-
                 imageView_img_dd.setVisibility(View.GONE);
                 rlv_img_null.setVisibility(View.VISIBLE);
             }
 //            Lỗi không có ảnh ? => ko decode => Length NULL: 14/4 Fix 19/4
-
             editText_title.setText(title);
             editText_content.setText(content);
             editText_day.setText(day);
             editText_time.setText(time);
-
+            textView_update_info.setText("Cập nhật lần cuối: "+updatetime);
         }
 
 
@@ -173,11 +177,13 @@ public class Detail_Activity extends AppCompatActivity {
                                             buttonTime.setVisibility(View.VISIBLE);
                                             buttonDay.setVisibility(View.VISIBLE);
                                             flag = true;
+                                            count++;
                                         } else {
                                             imageView_unCheck_detail.setImageResource(R.drawable.ic_checkbox_uncheck);
                                             buttonTime.setVisibility(View.GONE);
                                             buttonDay.setVisibility(View.GONE);
                                             flag = false;
+                                            count=0;
                                         }
                                     }
                                 });
@@ -187,9 +193,13 @@ public class Detail_Activity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View view) {
                                         update();
+                                        Log.d("CHECK_T", getTodayDate()+" "+ getCurrentTime());
+//                                        ContentValues contentValues = new ContentValues();
+//                                        String InfoUpdate = (String) contentValues.get("updateTime");
+//                                        Log.d("CHECK_T_T", InfoUpdate);
+
                                     }
                                 });
-
 
                                 break;
                             case R.id.id_item_menu_delete:
@@ -206,31 +216,35 @@ public class Detail_Activity extends AppCompatActivity {
 
 
     private void update() {
-        String title = editText_title.getText().toString();
-        String content = editText_content.getText().toString();
-        byte[] img = getByteArrayFromImageView(imageView_img_dd);
-        String time = buttonTime.getText().toString();
-        String day = buttonDay.getText().toString();
+        if (isEmpty()){
+            Toast.makeText(this, "Đề nghị nhập đầy đủ", Toast.LENGTH_SHORT).show();
+        }else{
+            String title = editText_title.getText().toString();
+            String content = editText_content.getText().toString();
+            String time = buttonTime.getText().toString();
+            String day = buttonDay.getText().toString();
+            String updatetime = getTodayDate() + ". " + getCurrentTime();
 
-        ContentValues contentValues = new ContentValues();
+            ContentValues contentValues = new ContentValues();
+            //contentValues.put("id", id);
+            contentValues.put("title", title);
+            contentValues.put("content", content);
+            contentValues.put("day", day);
+            contentValues.put("time", time);
+            contentValues.put("updatetime", updatetime);
+            if (uri != null){
+                byte[] img = getByteArrayFromImageView(imageView_img_dd);
+                contentValues.put("img", img);
+            }else{
+                contentValues.put("img", new byte[]{});
+            }
 
-        //contentValues.put("id", id);
-        contentValues.put("title", title);
-        contentValues.put("content", content);
-        contentValues.put("day", day);
-        contentValues.put("time", time);
-        contentValues.put("img", img);
 
-//        try {
-//        long kq =
-        database.update("ghichu", contentValues, "id = ?", new String[]{id + ""});
-//            Log.d("KQ_CHECK", kq + "");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+            database.update("ghichu", contentValues, "id = ?", new String[]{id + ""});
 
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void delete() {
@@ -261,6 +275,7 @@ public class Detail_Activity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CHOOSE_PHOTO) {
                 try {
+                    uri = data.getData();
                     Uri imgURI = data.getData();
                     InputStream is = getContentResolver().openInputStream(imgURI);
                     Bitmap bitmap = BitmapFactory.decodeStream(is);
@@ -275,14 +290,23 @@ public class Detail_Activity extends AppCompatActivity {
     }
 
 
-    private void initId() {
+//    private void initId() {
+//
+////        Intent intent = getIntent();
+////        id = intent.getIntExtra("id",-1);
+//        Cursor cursor = database.rawQuery("SELECT * FROM ghichu WHERE id = ?", new String[]{id + ""});
+//        cursor.moveToFirst();
+//
+//    }
 
-//        Intent intent = getIntent();
-//        id = intent.getIntExtra("id",-1);
-        Cursor cursor = database.rawQuery("SELECT * FROM ghichu WHERE id = ?", new String[]{id + ""});
-        cursor.moveToFirst();
 
+    private boolean isEmpty() {
+        if (editText_title.getText().toString().isEmpty() || editText_content.getText().toString().isEmpty() || count == 0) {
+            return true;
+        }
+        return false;
     }
+
 
     private void init() {
         imageView_back = findViewById(R.id.id_ivBack);
@@ -317,7 +341,7 @@ public class Detail_Activity extends AppCompatActivity {
         imageView_back.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
         imageView_more.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
         imageView_unCheck_detail.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
-        imageView_done.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
+        imageView_done.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
     }
 
 
@@ -327,6 +351,12 @@ public class Detail_Activity extends AppCompatActivity {
         datePickerDialog.setTitle("Chọn ngày");
 //        datePickerDialog.getDatePicker();
         datePickerDialog.show();
+    }
+
+    private String getCurrentTime(){
+        String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+        String timeNow = currentTime;
+        return timeNow;
     }
 
     private String getTodayDate() {
@@ -353,7 +383,7 @@ public class Detail_Activity extends AppCompatActivity {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        datePickerDialog = new DatePickerDialog(this, onDateSetListener, day, month, year);
+        datePickerDialog = new DatePickerDialog(this, onDateSetListener, year, month, day);
     }
 
     private String makeDateString(int day, int month, int year) {

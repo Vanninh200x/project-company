@@ -31,9 +31,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class Add_Activity extends AppCompatActivity {
@@ -45,6 +47,8 @@ public class Add_Activity extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private int hour, minute;
     private Uri uri = null;
+
+    private static int count=0;
 
     private Calendar calendar = Calendar.getInstance();
     private final int year = calendar.get(Calendar.YEAR);
@@ -60,7 +64,6 @@ public class Add_Activity extends AppCompatActivity {
         editText_time.setFocusable(false);
 
         initDataPicker();
-        button_date.setText(getTodayDate());
 
         imgV_img_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +82,7 @@ public class Add_Activity extends AppCompatActivity {
 
 //        BTN_CHECK TO show Button
         img_icon_check.setOnClickListener(new View.OnClickListener() {
+
             boolean flag = false;
 
             @Override
@@ -87,11 +91,15 @@ public class Add_Activity extends AppCompatActivity {
                     img_icon_check.setImageResource(R.drawable.ic_checkbox_checked);
                     button_date.setVisibility(View.VISIBLE);
                     button_time.setVisibility(View.VISIBLE);
+                    button_date.setText(getTodayDate());
+                    button_time.setText(getCurrentTime1());
+                    count++;
                     flag = true;
                 } else {
                     img_icon_check.setImageResource(R.drawable.ic_checkbox_uncheck);
                     button_date.setVisibility(View.GONE);
                     button_time.setVisibility(View.GONE);
+                    count=0;
                     flag = false;
                 }
             }
@@ -110,32 +118,39 @@ public class Add_Activity extends AppCompatActivity {
 
     //        Insert
     private void insert() {
-        String title = editText_title.getText().toString();
-        String content = editText_content.getText().toString();
-        String time = button_time.getText().toString();
-        String day = button_date.getText().toString();
+        if (isEmpty()) {
+            Toast.makeText(this, "Tạo thất bại đề nghị nhập đầy đủ", Toast.LENGTH_SHORT).show();
+        } else {
+            String title = editText_title.getText().toString();
+            String content = editText_content.getText().toString();
+            String time = button_time.getText().toString();
+            String day = button_date.getText().toString();
+            String updatetime = getTodayDate() + ". " + getCurrentTime();
 
-        ContentValues contentValues = new ContentValues();
+
+            ContentValues contentValues = new ContentValues();
 //        PUT dữ liệu
-        contentValues.put("title", title);
-        contentValues.put("content", content);
-        contentValues.put("day", day);
-        contentValues.put("time", time);
-        if (uri != null) {
-            byte[] img = getByteArrayFromImageView(imgV_img_add);
+            contentValues.put("title", title);
+            contentValues.put("content", content);
+            contentValues.put("day", day);
+            contentValues.put("time", time);
+            contentValues.put("updatetime", updatetime);
+            if (uri != null) {
+                byte[] img = getByteArrayFromImageView(imgV_img_add);
 
-            contentValues.put("img", img);
+                contentValues.put("img", img);
 
 //            Log.d("CHECK_IMG" , im)
-        } else {
+            } else {
 //            Toast.makeText(this, "BBB", Toast.LENGTH_SHORT).show();
-            contentValues.put("img", new byte[]{});
-        }
+                contentValues.put("img", new byte[]{});
+            }
 
-        SQLiteDatabase database = Database.initDatabase(this, "appNote.db");
-        database.insert("ghichu", null, contentValues);
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+            SQLiteDatabase database = Database.initDatabase(this, "appNote.db");
+            database.insert("ghichu", null, contentValues);
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
 
@@ -150,6 +165,13 @@ public class Add_Activity extends AppCompatActivity {
         return byteArray;
     }
 
+
+    private boolean isEmpty() {
+        if (editText_title.getText().toString().isEmpty() || editText_content.getText().toString().isEmpty() || count == 0) {
+           return true;
+        }
+        return false;
+    }
 
     private void init() {
         imgV_back = findViewById(R.id.id_ivBack);
@@ -227,9 +249,9 @@ public class Add_Activity extends AppCompatActivity {
     private void initDataPicker() {
         DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            public void onDateSet(DatePicker datePicker, int day, int month, int year) {
                 month = month + 1;
-                String date = makeDateString(day, month, year);
+                String date = makeDateString(year, month, day);
                 button_date.setText(date);
             }
         };
@@ -239,6 +261,17 @@ public class Add_Activity extends AppCompatActivity {
     }
 
 
+    private String getCurrentTime() {
+        String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+        String timeNow = currentTime;
+        return timeNow;
+    }
+
+    private String getCurrentTime1() {
+        String currentTime = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+        String timeNow = currentTime;
+        return timeNow;
+    }
 
     private String makeDateString(int day, int month, int year) {
         return day + " " + getMonthFormat(month) + " " + year;

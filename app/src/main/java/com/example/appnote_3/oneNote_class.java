@@ -4,7 +4,26 @@ public class oneNote_class {
     private int id;
     private String textV_title, textV_content, textV_day, textV_time;
     private byte[] img_font;
+    private String textV_updateTime;
 
+
+    public oneNote_class(int id, String textV_title, String textV_content, String textV_day, String textV_time, byte[] img_font, String textV_updateTime) {
+        this.id = id;
+        this.textV_title = textV_title;
+        this.textV_content = textV_content;
+        this.textV_day = textV_day;
+        this.textV_time = textV_time;
+        this.img_font = img_font;
+        this.textV_updateTime = textV_updateTime;
+    }
+
+    public String getTextV_updateTime() {
+        return textV_updateTime;
+    }
+
+    public void setTextV_updateTime(String textV_updateTime) {
+        this.textV_updateTime = textV_updateTime;
+    }
 
     public int getId() {
         return id;
@@ -13,16 +32,6 @@ public class oneNote_class {
     public void setId(int id) {
         this.id = id;
     }
-
-    public oneNote_class(int id,String textV_title, String textV_content, String textV_day, String textV_time, byte[] img_font) {
-        this.id = id;
-        this.textV_title = textV_title;
-        this.textV_content = textV_content;
-        this.textV_day = textV_day;
-        this.textV_time = textV_time;
-        this.img_font = img_font;
-    }
-
 
     public String getTextV_title() {
         return textV_title;

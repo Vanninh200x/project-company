@@ -42,5 +42,7 @@
     <string name="edit_notifi_buzz">Rung</string>
     <string name="edit_notifi_lamp">Đèn báo</string>
     <string name="text_btn_login">Đăng nhập</string>
+    <string name="menu_arrows_1">Arrows1</string>
+    <string name="delete_all">Xóa tất cả</string>
 
 </resources>

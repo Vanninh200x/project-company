@@ -32,8 +32,12 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private final String DATABASE_NAME = "appNote.db";
@@ -141,6 +145,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 bundle.putString("content", list.get(i).getTextV_content());
                 bundle.putString("time", list.get(i).getTextV_time());
                 bundle.putString("day", list.get(i).getTextV_day());
+                bundle.putString("updatetime", list.get(i).getTextV_updateTime());
+
+                Log.d("UPDATE", list.get(i).getTextV_updateTime());
+
 
 // Lỗi do không bundle được ảnh null.
                 if (list.get(i).getImg_font().length > 0) {
@@ -230,7 +238,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String day = cursor.getString(3);
             String time = cursor.getString(4);
             byte[] img = cursor.getBlob(5);
-            list.add(new oneNote_class(id, title, content, day, time, img));
+            String updateTime = cursor.getString(6);
+            list.add(new oneNote_class(id, title, content, day, time, img, updateTime));
         }
         adapter.notifyDataSetChanged();
     }
@@ -253,9 +262,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 database.delete("ghichu", null, null);
                 finish();
                 startActivity(getIntent());
-                Toast.makeText(this, "3_DeleteAll", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Xóa tất cả", Toast.LENGTH_SHORT).show();
                 break;
         }
         return false;
+    }
+
+    private String getCurrentTime(){
+        String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+        String timeNow = currentTime;
+        return timeNow;
+    }
+
+    private String getTodayDate() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        month = month + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        return makeDateString(day, month, year);
+    }
+
+    private String makeDateString(int day, int month, int year) {
+        return day + " " + getMonthFormat(month) + " " + year;
+    }
+
+    private String getMonthFormat(int month) {
+        if (month == 1) {
+            return "Tháng 1";
+        }
+        if (month == 2) {
+            return "Tháng 2";
+        }
+        if (month == 3) {
+            return "Tháng 3";
+        }
+        if (month == 4) {
+            return "Tháng 4";
+        }
+        if (month == 5) {
+            return "Tháng 5";
+        }
+        if (month == 6) {
+            return "Tháng 6";
+        }
+        if (month == 7) {
+            return "Tháng 7";
+        }
+        if (month == 8) {
+            return "Tháng 8";
+        }
+        if (month == 9) {
+            return "Tháng 9";
+        }
+        if (month == 10) {
+            return "Tháng 10";
+        }
+        if (month == 11) {
+            return "Tháng 11";
+        }
+        if (month == 12) {
+            return "Tháng 12";
+        }
+//        Trường hợp này không bao giờ xảy ra.!
+
+        return "Tháng 1";
     }
 }

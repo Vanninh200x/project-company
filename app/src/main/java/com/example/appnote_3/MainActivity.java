@@ -8,6 +8,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -26,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -39,17 +41,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
     private final String DATABASE_NAME = "appNote.db";
     private SQLiteDatabase database;
-    private ImageView imgV_menu, imgV_Plus, imgV_search, imageView_clock;
+    private ImageView imgV_menu, imgV_Plus, imgV_search, imageView_clock, imgV_padLock, imgV_notifi, imgV_trash, img_rightArrow1, img_rightArrow2, img_rightArrow3 ;
     private EditText editText_Search;
 
     private ListView listView;
     private ArrayList<oneNote_class> list;
     private AdapterNote adapter;
 
-    private NavigationView navigationView;
+//    private NavigationView navigationView;
     private DrawerLayout drawerLayout;
 
     private int id = -1;
@@ -63,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextInputLayout textInputLayout;
     private Button button_login_loginAC;
     private static int CHECK_OPEN_MAINAC_ONETIME=0;
+
+    private RelativeLayout rlvMenuLeft, rlv_navigation_1, rlv_navigation_2, rlv_navigation_3;
 
 
     @Override
@@ -115,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            Toast.makeText(this, "Sai mật khẩu", Toast.LENGTH_SHORT).show();
 //        }
 //    }
+
 
     private void initClick() {
         imgV_Plus.setOnClickListener(new View.OnClickListener() {
@@ -183,6 +188,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 filter(editable.toString());
             }
         });
+
+
+        rlv_navigation_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Editpasswd_Activity.class);
+                startActivity(intent);
+            }
+        });
+
+        rlv_navigation_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, EditNotifi_Activity.class);
+                startActivity(intent);
+            }
+        });
+
+        rlv_navigation_3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                database.delete("ghichu", null, null);
+                finish();
+                startActivity(getIntent());
+                Toast.makeText(MainActivity.this, "Xóa tất cả", Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     //    FILTER : SEARCH
@@ -206,18 +239,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         imgV_menu = findViewById(R.id.id_ivMẹnu);
         imgV_Plus = findViewById(R.id.id_ivPlus);
         imgV_search = findViewById(R.id.id_imgV_main_search);
+        imgV_padLock = findViewById(R.id.id_img_padLock);
+        imgV_notifi = findViewById(R.id.id_img_notification);
+        imgV_trash = findViewById(R.id.id_img_trash);
         editText_Search = findViewById(R.id.id_edt_search);
+
+        rlv_navigation_1 = findViewById(R.id.id_rela_layout_navigation_1);
+        rlv_navigation_2 = findViewById(R.id.id_rela_layout_navigation_2);
+        rlv_navigation_3 = findViewById(R.id.id_rela_layout_navigation_3);
+        img_rightArrow1 = findViewById(R.id.id_imgV_right_arrow1);
+        img_rightArrow2 = findViewById(R.id.id_imgV_right_arrow2);
+        img_rightArrow3 = findViewById(R.id.id_imgV_right_arrow3);
+
+
+
+        rlvMenuLeft = findViewById(R.id.layoutLeftMenu);
 
 
         imgV_menu.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
         imgV_Plus.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
         imgV_search.setColorFilter(Color.parseColor("#999999"), PorterDuff.Mode.SRC_IN);
+        imgV_padLock.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
+        imgV_notifi.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
+        imgV_trash.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
+        img_rightArrow1.setColorFilter(Color.parseColor("#999999"), PorterDuff.Mode.SRC_IN);
+        img_rightArrow2.setColorFilter(Color.parseColor("#999999"), PorterDuff.Mode.SRC_IN);
+        img_rightArrow3.setColorFilter(Color.parseColor("#999999"), PorterDuff.Mode.SRC_IN);
+//
+//
 
 //
 //        Init layoutDrawer
-        navigationView = findViewById(R.id.id_navigation);
+//        navigationView = findViewById(R.id.id_navigation);
         drawerLayout = findViewById(R.id.id_drawerlayout);
-        navigationView.setNavigationItemSelectedListener(this);
+//        navigationView.setNavigationItemSelectedListener(this);
+//        Change color icon list
+//        navigationView.setItemIconTintList(ColorStateList.valueOf(Color.parseColor("#686EFE")));
 
 
         listView = findViewById(R.id.id_list_View);
@@ -245,43 +302,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.id_item_passwd:
-                Intent intent = new Intent(MainActivity.this, Editpasswd_Activity.class);
-                startActivity(intent);
-                break;
-            case R.id.id_item_notification:
-                Intent intent1 = new Intent(MainActivity.this, EditNotifi_Activity.class);
-                startActivity(intent1);
-                break;
-            case R.id.id_item_deleteAll:
-//                SQLiteDatabase database = Database.initDatabase(this, "appNote.db");
+
+//    private String getCurrentTime(){
+//        String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+//        String timeNow = currentTime;
+//        return timeNow;
+//    }
 //
-                database.delete("ghichu", null, null);
-                finish();
-                startActivity(getIntent());
-                Toast.makeText(this, "Xóa tất cả", Toast.LENGTH_SHORT).show();
-                break;
-        }
-        return false;
-    }
-
-    private String getCurrentTime(){
-        String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-        String timeNow = currentTime;
-        return timeNow;
-    }
-
-    private String getTodayDate() {
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        month = month + 1;
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        return makeDateString(day, month, year);
-    }
+//    private String getTodayDate() {
+//        Calendar calendar = Calendar.getInstance();
+//        int year = calendar.get(Calendar.YEAR);
+//        int month = calendar.get(Calendar.MONTH);
+//        month = month + 1;
+//        int day = calendar.get(Calendar.DAY_OF_MONTH);
+//        return makeDateString(day, month, year);
+//    }
 
     private String makeDateString(int day, int month, int year) {
         return day + " " + getMonthFormat(month) + " " + year;

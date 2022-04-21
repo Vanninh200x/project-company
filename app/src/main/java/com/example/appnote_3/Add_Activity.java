@@ -54,12 +54,16 @@ public class Add_Activity extends AppCompatActivity {
     private final int year = calendar.get(Calendar.YEAR);
     private final int month = calendar.get(Calendar.MONTH);
     private final int day = calendar.get(Calendar.DAY_OF_MONTH);
+    SQLiteDatabase database;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        database = Database.initDatabase(this, "appNote.db");
         setContentView(R.layout.activity_add);
+
         init();
         editText_time.setFocusable(false);
 
@@ -137,7 +141,6 @@ public class Add_Activity extends AppCompatActivity {
             contentValues.put("updatetime", updatetime);
             if (uri != null) {
                 byte[] img = getByteArrayFromImageView(imgV_img_add);
-
                 contentValues.put("img", img);
 
 //            Log.d("CHECK_IMG" , im)
@@ -146,7 +149,6 @@ public class Add_Activity extends AppCompatActivity {
                 contentValues.put("img", new byte[]{});
             }
 
-            SQLiteDatabase database = Database.initDatabase(this, "appNote.db");
             database.insert("ghichu", null, contentValues);
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
@@ -189,9 +191,9 @@ public class Add_Activity extends AppCompatActivity {
         button_time.setVisibility(View.GONE);
 
 //      SET COLOR
+//        imgV_img_add.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
         imgV_back.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
         imgV_done.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
-        imgV_img_add.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
         img_icon_check.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
 
     }
@@ -202,6 +204,7 @@ public class Add_Activity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CHOOSE_PHOTO) {
                 try {
+//                    imgV_img_add.setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_IN);
                     uri = data.getData();
                     Uri imgURI = data.getData();
                     InputStream is = getContentResolver().openInputStream(imgURI);

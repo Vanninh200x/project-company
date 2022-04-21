@@ -106,8 +106,9 @@ public class Editpasswd_Activity extends AppCompatActivity {
 
 //      SETCOLOR
 
-        imageView_back.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
-        imageView_done.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
+        imageView_back.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
+        imageView_done.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
+
 
     }
 }

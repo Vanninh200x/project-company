@@ -247,6 +247,9 @@ public class Add_Activity extends AppCompatActivity {
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, hour, minute, true);
         timePickerDialog.setTitle("Chọn giờ");
         timePickerDialog.show();
+
+
+
     }
 
     private void initDataPicker() {

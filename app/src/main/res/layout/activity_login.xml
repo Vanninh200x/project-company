@@ -28,9 +28,11 @@
             android:textAlignment="center"
             android:textSize="20sp" />
 
-
-
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/id_textV_title"
+            android:background="@color/Color_under_title" />
 
     </RelativeLayout>
 

@@ -53,6 +53,12 @@
             android:contentDescription="@null"
             android:padding="14dp"
             android:src="@drawable/ic_done" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/id_ivBack"
+            android:background="@color/Color_under_title" />
     </RelativeLayout>
 
     <RelativeLayout

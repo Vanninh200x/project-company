@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="Color_Default">#686EFE</color>
     <color name="Color_img">#9A9A9A</color>
+    <color name="Color_under_title">#EEEEEE</color>
 </resources>

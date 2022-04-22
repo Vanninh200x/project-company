@@ -92,7 +92,7 @@ public class EditNotifi_Activity extends AppCompatActivity {
 
 
 //        SETCOLOR
-        imageView_back.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
+        imageView_back.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
         imageView_uncheck_box_1.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
         imageView_uncheck_box_2.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
         imageView_uncheck_box_3.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);

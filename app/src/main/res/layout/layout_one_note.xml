@@ -8,23 +8,23 @@
     <RelativeLayout
         android:layout_marginStart="14dp"
         android:id="@+id/rlvIMG"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="125px"
+        android:layout_height="125px">
 
         <ImageView
             android:id="@+id/id_img_dd"
-            android:layout_width="125px"
-            android:layout_height="125px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:padding="5dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_image" />
 
-        <include
-            android:id="@+id/id_img_null"
-            layout="@layout/img_when_null"
-            android:layout_width="125px"
-            android:layout_height="125px"
-            android:visibility="gone"></include>
+            <include
+                android:id="@+id/id_img_null"
+                layout="@layout/img_when_null"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"></include>
 
     </RelativeLayout>
 
@@ -35,10 +35,11 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/rlvIMG"
+        android:singleLine="true"
         android:padding="5dp"
-        android:textStyle="bold"
         android:text="@string/one_note_demo_tile"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/id_textV_content"

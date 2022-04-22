@@ -15,29 +15,35 @@
         android:theme="@style/Theme.AppNote_3">
         <activity
             android:name=".Login_Activity"
+            android:screenOrientation="portrait"
             android:label="Login"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".EditNotifi_Activity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".Editpasswd_Activity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".Detail_Activity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".Add_Activity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

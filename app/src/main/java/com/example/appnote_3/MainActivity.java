@@ -44,14 +44,14 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private final String DATABASE_NAME = "appNote.db";
     private SQLiteDatabase database;
-    private ImageView imgV_menu, imgV_Plus, imgV_search, imageView_clock, imgV_padLock, imgV_notifi, imgV_trash, img_rightArrow1, img_rightArrow2, img_rightArrow3 ;
+    private ImageView imgV_menu, imgV_Plus, imgV_search, imageView_clock, imgV_padLock, imgV_notifi, imgV_trash, img_rightArrow1, img_rightArrow2, img_rightArrow3;
     private EditText editText_Search;
 
     private ListView listView;
     private ArrayList<oneNote_class> list;
     private AdapterNote adapter;
 
-//    private NavigationView navigationView;
+    //    private NavigationView navigationView;
     private DrawerLayout drawerLayout;
 
     private int id = -1;
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText editText_passswd_loginAC;
     private TextInputLayout textInputLayout;
     private Button button_login_loginAC;
-    private static int CHECK_OPEN_MAINAC_ONETIME=0;
+    private static int CHECK_OPEN_MAINAC_ONETIME = 0;
 
     private RelativeLayout rlvMenuLeft, rlv_navigation_1, rlv_navigation_2, rlv_navigation_3;
 
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         database = Database.initDatabase(this, DATABASE_NAME);
         sharedPreferences = getSharedPreferences(SHARE_PRE_NAME, MODE_PRIVATE);
         passwd_App = sharedPreferences.getString(KEY_PASS, "");
-        if (passwd_App.length() > 0 && CHECK_OPEN_MAINAC_ONETIME == 0 ) {
+        if (passwd_App.length() > 0 && CHECK_OPEN_MAINAC_ONETIME == 0) {
             setContentView(R.layout.activity_login);
             initLogin();
             button_login_loginAC.setOnClickListener(new View.OnClickListener() {
@@ -85,12 +85,12 @@ public class MainActivity extends AppCompatActivity {
                     String passInput = editText_passswd_loginAC.getText().toString().trim();
                     if (passInput.equals(realPass)) {
                         CHECK_OPEN_MAINAC_ONETIME++;
-                        Log.d("CHECK_KQ_1", CHECK_OPEN_MAINAC_ONETIME +"");
+                        Log.d("CHECK_KQ_1", CHECK_OPEN_MAINAC_ONETIME + "");
                         setContentView(R.layout.activity_main);
                         init();
                         read();
                         initClick();
-                        Log.d("CHECK_PO", CHECK_OPEN_MAINAC_ONETIME +"");
+                        Log.d("CHECK_PO", CHECK_OPEN_MAINAC_ONETIME + "");
                     } else {
                         textInputLayout.setErrorEnabled(false);
                         textInputLayout.setError("Sai mật khẩu");
@@ -154,8 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Log.d("UPDATE", list.get(i).getTextV_updateTime());
 
-
-// Lỗi do không bundle được ảnh null.
+// Lỗi do không bundle được ảnh null. Đã fix
                 if (list.get(i).getImg_font().length > 0) {
                     Bitmap b = BitmapFactory.decodeByteArray(list.get(i).getImg_font(), 0, list.get(i).getImg_font().length);
                     ByteArrayOutputStream bs = new ByteArrayOutputStream();
@@ -236,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        imgV_menu = findViewById(R.id.id_ivMẹnu);
+        imgV_menu = findViewById(R.id.id_ivMenu);
         imgV_Plus = findViewById(R.id.id_ivPlus);
         imgV_search = findViewById(R.id.id_imgV_main_search);
         imgV_padLock = findViewById(R.id.id_img_padLock);
@@ -250,7 +249,6 @@ public class MainActivity extends AppCompatActivity {
         img_rightArrow1 = findViewById(R.id.id_imgV_right_arrow1);
         img_rightArrow2 = findViewById(R.id.id_imgV_right_arrow2);
         img_rightArrow3 = findViewById(R.id.id_imgV_right_arrow3);
-
 
 
         rlvMenuLeft = findViewById(R.id.layoutLeftMenu);
@@ -300,7 +298,6 @@ public class MainActivity extends AppCompatActivity {
         }
         adapter.notifyDataSetChanged();
     }
-
 
 
 //    private String getCurrentTime(){

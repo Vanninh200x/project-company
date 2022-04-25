@@ -2,10 +2,13 @@ package com.example.appnote_3;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.app.WallpaperManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -31,12 +34,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import Alarm.AlarmBrodcast;
 
 public class Add_Activity extends AppCompatActivity {
     final String DATABASE_NAME = "appNote.db";
@@ -48,13 +54,19 @@ public class Add_Activity extends AppCompatActivity {
     private int hour, minute;
     private Uri uri = null;
 
-    private static int count=0;
+    private static int count = 0;
 
     private Calendar calendar = Calendar.getInstance();
     private final int year = calendar.get(Calendar.YEAR);
     private final int month = calendar.get(Calendar.MONTH);
     private final int day = calendar.get(Calendar.DAY_OF_MONTH);
-    SQLiteDatabase database;
+    private SQLiteDatabase database;
+
+    private String timeTonotify;
+    private String DayAlert = "";
+    private String TimeAlert;
+
+    private byte[] img;
 
 
 
@@ -81,6 +93,7 @@ public class Add_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 insert();
+//                processInsert(title, content,day, time);
             }
         });
 
@@ -103,7 +116,7 @@ public class Add_Activity extends AppCompatActivity {
                     img_icon_check.setImageResource(R.drawable.ic_checkbox_uncheck);
                     button_date.setVisibility(View.GONE);
                     button_time.setVisibility(View.GONE);
-                    count=0;
+                    count = 0;
                     flag = false;
                 }
             }
@@ -117,8 +130,22 @@ public class Add_Activity extends AppCompatActivity {
             }
         });
 
+        button_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectTime();
+            }
+        });
 
+        button_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                openDatePicker(view);
+                selectDate();
+            }
+        });
     }
+
 
     //        Insert
     private void insert() {
@@ -140,7 +167,7 @@ public class Add_Activity extends AppCompatActivity {
             contentValues.put("time", time);
             contentValues.put("updatetime", updatetime);
             if (uri != null) {
-                byte[] img = getByteArrayFromImageView(imgV_img_add);
+                img = getByteArrayFromImageView(imgV_img_add);
                 contentValues.put("img", img);
 
 //            Log.d("CHECK_IMG" , im)
@@ -148,11 +175,42 @@ public class Add_Activity extends AppCompatActivity {
 //            Toast.makeText(this, "BBB", Toast.LENGTH_SHORT).show();
                 contentValues.put("img", new byte[]{});
             }
-
             database.insert("ghichu", null, contentValues);
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+
+//            Intent intent = new Intent(this, MainActivity.class);
+//            startActivity(intent);
+            setAlarm(title, content, DayAlert, time, img);
         }
+    }
+
+    //    SET ALARM
+    private void setAlarm(String title, String content, String day, String time, byte[] img) {
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);                   //assigining alaram manager object to set alaram
+
+        Intent intent = new Intent(getApplicationContext(), AlarmBrodcast.class);
+        intent.putExtra("title", title);                                                       //sending data to alarm class to create channel and notification
+        intent.putExtra("content", content);
+        intent.putExtra("day", day);
+        intent.putExtra("time", time);
+        intent.putExtra("img", img);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        String dateandtime = day + " " + timeTonotify;
+        Log.d("KIEMTRA", dateandtime);
+        Log.e("CHECK_IMG", img+ "");
+        DateFormat formatter = new SimpleDateFormat("d-M-yyyy hh:mm");
+        try {
+            Date date1 = formatter.parse(dateandtime);
+            Log.d("KIEMTRA_1", date1.toString());
+            am.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
+            Toast.makeText(getApplicationContext(), "Alarm", Toast.LENGTH_SHORT).show();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Intent intentBack = new Intent(getApplicationContext(), MainActivity.class);                //this intent will be called once the setting alaram is completes
+        intentBack.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intentBack);                                                                  //navigates from adding reminder activity ot mainactivity
     }
 
 
@@ -170,7 +228,7 @@ public class Add_Activity extends AppCompatActivity {
 
     private boolean isEmpty() {
         if (editText_title.getText().toString().isEmpty() || editText_content.getText().toString().isEmpty() || count == 0) {
-           return true;
+            return true;
         }
         return false;
     }
@@ -224,6 +282,7 @@ public class Add_Activity extends AppCompatActivity {
         int month = calendar.get(Calendar.MONTH);
         month = month + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
+        DayAlert = day + "-" + (month) + "-" + year;
         return makeDateString(day, month, year);
     }
 
@@ -235,35 +294,90 @@ public class Add_Activity extends AppCompatActivity {
     }
 
 
-    public void popTimePicker(View view) {
-        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+//    public void selectTime(View view) {
+//        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+//            @Override
+//            public void onTimeSet(TimePicker timePicker, int selectHour, int selectMinute) {
+//                hour = selectHour;
+//                minute = selectMinute;
+//                button_time.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+//            }
+//        };
+//        TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, hour, minute, true);
+//        timePickerDialog.setTitle("Chọn giờ");
+//        timePickerDialog.show();
+//
+//    }
+
+    private void selectTime() {                                                                     //this method performs the time picker task
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
-            public void onTimeSet(TimePicker timePicker, int selectHour, int selectMinute) {
-                hour = selectHour;
-                minute = selectMinute;
-                button_time.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                timeTonotify = i + ":" + i1;                                                        //temp variable to store the time to set alarm
+                button_time.setText(String.format(Locale.getDefault(), "%02d:%02d", i, i1));
+                TimeAlert = i+":"+i1;
             }
-        };
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, hour, minute, true);
-        timePickerDialog.setTitle("Chọn giờ");
+        }, hour, minute, false);
         timePickerDialog.show();
+    }
+//
+//    private void selectDate() {                                                                     //this method performs the date picker task
+//        Calendar calendar = Calendar.getInstance();
+//        int year = calendar.get(Calendar.YEAR);
+//        int month = calendar.get(Calendar.MONTH);
+//        int day = calendar.get(Calendar.DAY_OF_MONTH);
+//        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+//            @Override
+//            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+//                button_date.setText(day + " Tháng " + (month + 1) + " " + year);//sets the selected date as test for button
+//                DayAlert = day + "-" + (month + 1) + "-"+ year;
+//            }
+//
+//        }, year, month, day);
+//        datePickerDialog.show();
+//    }
 
 
+    public String FormatTime(int hour, int minute) {                                                //this method converts the time into 12hr farmat and assigns am or pm
 
+        String time;
+        time = "";
+        String formattedMinute;
+
+        if (minute / 10 == 0) {
+            formattedMinute = "0" + minute;
+        } else {
+            formattedMinute = "" + minute;
+        }
+
+
+        if (hour == 0) {
+            time = "12" + ":" + formattedMinute + " AM";
+        } else if (hour < 12) {
+            time = hour + ":" + formattedMinute + " AM";
+        } else if (hour == 12) {
+            time = "12" + ":" + formattedMinute + " PM";
+        } else {
+            int temp = hour - 12;
+            time = temp + ":" + formattedMinute + " PM";
+        }
+        return time;
     }
 
     private void initDataPicker() {
         DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int day, int month, int year) {
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
                 String date = makeDateString(year, month, day);
                 button_date.setText(date);
+//                DayAlert = day + "-" + (month + 1) + "-" + year;
             }
         };
-
         datePickerDialog = new DatePickerDialog(this, onDateSetListener, year, month, day);
-
     }
 
 
@@ -329,6 +443,25 @@ public class Add_Activity extends AppCompatActivity {
         datePickerDialog.setTitle("Chọn ngày");
         datePickerDialog.show();
 
+
     }
+
+    private void selectDate() {                                                                     //this method performs the date picker task
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                button_date.setText(day + " Tháng " + (month + 1) + " " + year);//sets the selected date as test for button
+                DayAlert = day + "-" + (month + 1) + "-" + year;
+                Log.d("KIEMTRA", DayAlert);
+            }
+
+        }, year, month, day);
+        datePickerDialog.show();
+    }
+
 
 }

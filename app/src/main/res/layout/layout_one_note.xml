@@ -59,10 +59,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/id_textV_content"
         android:layout_marginLeft="15dp"
-
         android:layout_toRightOf="@+id/rlvIMG"
         android:padding="15dp"
-        android:src="@drawable/ic_clock" />
+        android:src="@drawable/ic_alarm_clock" />
 
 
     <TextView

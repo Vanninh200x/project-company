@@ -98,7 +98,6 @@ public class AdapterNote extends BaseAdapter {
             holder.rlvNull.setVisibility(View.VISIBLE);
             char s = note.getTextV_title().charAt(0);
             holder.textView_wImg_Null.setText(String.valueOf(s));
-            Log.d("KIEMTRA_TV", s + "");
         }
         return view;
     }

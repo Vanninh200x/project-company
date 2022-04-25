@@ -124,7 +124,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="15dp"
-            android:src="@drawable/ic_clock" />
+            android:src="@drawable/ic_alarm_clock" />
 
 
         <androidx.appcompat.widget.AppCompatEditText
@@ -135,7 +135,6 @@
             android:enabled="false"
             android:hint="@string/one_note_demo_day"
             android:padding="4dp"
-            android:textColor="@color/black"
             android:textSize="20sp" />
 
 
@@ -148,7 +147,6 @@
             android:enabled="false"
             android:hint="@string/one_note_demo_time"
             android:padding="4dp"
-            android:textColor="@color/black"
             android:textSize="20sp" />
 
 

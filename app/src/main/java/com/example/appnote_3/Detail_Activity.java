@@ -372,7 +372,7 @@ public class Detail_Activity extends AppCompatActivity {
     private void initDataPicker() {
         DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int day, int month, int year) {
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
                 String date = makeDateString(year, month, day);
                 buttonDay.setText(date);
@@ -386,7 +386,7 @@ public class Detail_Activity extends AppCompatActivity {
         datePickerDialog = new DatePickerDialog(this, onDateSetListener, year, month, day);
     }
 
-    private String makeDateString(int day, int month, int year) {
+    private String makeDateString(int year, int month, int day) {
         return day + " " + getMonthFormat(month) + " " + year;
     }
 
@@ -427,8 +427,6 @@ public class Detail_Activity extends AppCompatActivity {
         if (month == 12) {
             return "Tháng 12";
         }
-//        Trường hợp này không bao giờ xảy ra.!
-
         return "Tháng 1";
     }
 

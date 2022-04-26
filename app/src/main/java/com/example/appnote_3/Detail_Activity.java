@@ -6,9 +6,12 @@ import static java.lang.String.*;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 
 import android.database.Cursor;
@@ -38,11 +41,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import Alarm.AlarmBrodcast;
 
 public class Detail_Activity extends AppCompatActivity {
     final String DATABASE_NAME = "appNote.db";
@@ -59,7 +65,12 @@ public class Detail_Activity extends AppCompatActivity {
     private SQLiteDatabase database;
     private byte[] img;
     private Uri uri = null;
-    private static int count=0;
+    private boolean flag = false;
+
+    private String timeTonotify;
+    private String DayAlert = "";
+    private String TimeAlert;
+    private char aChar;
 
 
     @Override
@@ -100,7 +111,7 @@ public class Detail_Activity extends AppCompatActivity {
             editText_content.setText(content);
             editText_day.setText(day);
             editText_time.setText(time);
-            textView_update_info.setText("Cập nhật lần cuối: "+updatetime);
+            textView_update_info.setText("Cập nhật lần cuối: " + updatetime);
         }
 
 
@@ -132,9 +143,9 @@ public class Detail_Activity extends AppCompatActivity {
                                 imageView_more.setVisibility(View.GONE);
                                 rlvChecktime.setVisibility(View.VISIBLE);
                                 imageView_done.setVisibility(View.VISIBLE);
-                                imageView_unCheck_detail.setImageResource(R.drawable.ic_checkbox_checked);
-                                buttonTime.setVisibility(View.VISIBLE);
-                                buttonDay.setVisibility(View.VISIBLE);
+                                imageView_unCheck_detail.setImageResource(R.drawable.ic_checkbox_uncheck);
+                                buttonTime.setVisibility(View.GONE);
+                                buttonDay.setVisibility(View.GONE);
                                 buttonTime.setText(editText_time.getText().toString());
                                 buttonDay.setText(editText_day.getText().toString());
                                 editText_title.setEnabled(true);
@@ -167,8 +178,6 @@ public class Detail_Activity extends AppCompatActivity {
 
 //                                Button Check
                                 imageView_unCheck_detail.setOnClickListener(new View.OnClickListener() {
-                                    boolean flag = false;
-
 
                                     @Override
                                     public void onClick(View view) {
@@ -177,13 +186,11 @@ public class Detail_Activity extends AppCompatActivity {
                                             buttonTime.setVisibility(View.VISIBLE);
                                             buttonDay.setVisibility(View.VISIBLE);
                                             flag = true;
-                                            count++;
                                         } else {
                                             imageView_unCheck_detail.setImageResource(R.drawable.ic_checkbox_uncheck);
-                                            buttonTime.setVisibility(View.GONE);
                                             buttonDay.setVisibility(View.GONE);
+                                            buttonTime.setVisibility(View.GONE);
                                             flag = false;
-                                            count=0;
                                         }
                                     }
                                 });
@@ -193,10 +200,7 @@ public class Detail_Activity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View view) {
                                         update();
-                                        Log.d("CHECK_T", getTodayDate()+" "+ getCurrentTime());
-//                                        ContentValues contentValues = new ContentValues();
-//                                        String InfoUpdate = (String) contentValues.get("updateTime");
-//                                        Log.d("CHECK_T_T", InfoUpdate);
+                                        Log.d("CHECK_T", getTodayDate() + " " + getCurrentTime());
 
                                     }
                                 });
@@ -212,13 +216,122 @@ public class Detail_Activity extends AppCompatActivity {
                 popupMenu.show();
             }
         });
+
+
+        buttonDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectDate();
+            }
+        });
+
+        buttonTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectTime();
+            }
+        });
+    }
+
+
+    private void setAlarm(String title, String content, String day, String time, byte[] img) {
+
+        AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);                   //assigining alaram manager object to set alaram
+
+        Intent intent = new Intent(getApplicationContext(), AlarmBrodcast.class);
+        intent.putExtra("title", title);                                                       //sending data to alarm class to create channel and notification
+        intent.putExtra("content", content);
+        intent.putExtra("day", day);
+        intent.putExtra("time", time);
+        intent.putExtra("img", img);
+
+        Log.e("CHECK_TI", title);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        String dateandtime = day + " " + timeTonotify;
+//        Log.d("KIEMTRA", dateandtime);
+//        Log.e("CHECK_IMG", img + "");
+        DateFormat formatter = new SimpleDateFormat("d-M-yyyy hh:mm");
+        try {
+            Date date1 = formatter.parse(dateandtime);
+//            Log.d("KIEMTRA_1", date1.toString());
+            am.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
+
+            Toast.makeText(getApplicationContext(), "Editing Success", Toast.LENGTH_SHORT).show();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Intent intentBack = new Intent(getApplicationContext(), MainActivity.class);
+        intentBack.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intentBack);
+    }
+
+
+    public String FormatTime(int hour, int minute) {                                                //this method converts the time into 12hr farmat and assigns am or pm
+
+        String time;
+        time = "";
+        String formattedMinute;
+
+        if (minute / 10 == 0) {
+            formattedMinute = "0" + minute;
+        } else {
+            formattedMinute = "" + minute;
+        }
+
+
+        if (hour == 0) {
+            time = "12" + ":" + formattedMinute + " AM";
+        } else if (hour < 12) {
+            time = hour + ":" + formattedMinute + " AM";
+        } else if (hour == 12) {
+            time = "12" + ":" + formattedMinute + " PM";
+        } else {
+            int temp = hour - 12;
+            time = temp + ":" + formattedMinute + " PM";
+        }
+        return time;
+    }
+
+    private void selectTime() {                                                                     //this method performs the time picker task
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                timeTonotify = i + ":" + i1;                                                        //temp variable to store the time to set alarm
+                buttonTime.setText(String.format(Locale.getDefault(), "%02d:%02d", i, i1));
+                TimeAlert = i + ":" + i1;
+            }
+        }, hour, minute, false);
+        timePickerDialog.show();
+    }
+
+    private void selectDate() {                                                                     //this method performs the date picker task
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                buttonDay.setText(day + " Tháng " + (month + 1) + " " + year);//sets the selected date as test for button
+                DayAlert = day + "-" + (month + 1) + "-" + year;
+//                Log.d("KIEMTRA", DayAlert);
+            }
+
+        }, year, month, day);
+        datePickerDialog.show();
     }
 
 
     private void update() {
-        if (isEmpty()){
+        if (isEmpty()) {
             Toast.makeText(this, "Đề nghị nhập đầy đủ", Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
+
             String title = editText_title.getText().toString();
             String content = editText_content.getText().toString();
             String time = buttonTime.getText().toString();
@@ -226,22 +339,59 @@ public class Detail_Activity extends AppCompatActivity {
             String updatetime = getTodayDate() + ". " + getCurrentTime();
 
             ContentValues contentValues = new ContentValues();
-            //contentValues.put("id", id);
+//            contentValues.put("id", id);
             contentValues.put("title", title);
+            Log.d("CHECK_TITLE", title);
             contentValues.put("content", content);
             contentValues.put("day", day);
             contentValues.put("time", time);
             contentValues.put("updatetime", updatetime);
-            if (uri != null){
+
+
+            if (uri != null || img.length > 0) {
                 byte[] img = getByteArrayFromImageView(imageView_img_dd);
                 contentValues.put("img", img);
-            }else{
+            } else {
                 contentValues.put("img", new byte[]{});
             }
-
-
             database.update("ghichu", contentValues, "id = ?", new String[]{id + ""});
 
+//            if (uri != null || img.length > 0) {
+//                img = getByteArrayFromImageView(imageView_img_dd);
+//                Log.e("CHECK_IMG_DETAIL", img +"");
+//                contentValues.put("img", img);
+//                database.update("ghichu",contentValues, "id= ?", new String[]{id + ""});
+//                setAlarm(title, content, DayAlert, time, img);
+//            } else {
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        RelativeLayout layout = (RelativeLayout) findViewById(R.id.id_img_null_add);
+//                        layout.setDrawingCacheEnabled(true);
+//                        Bitmap bitmap = Bitmap.createBitmap(layout.getDrawingCache());
+//                        layout.setDrawingCacheEnabled(false);
+//
+//                        //CONVERT BITMAP TO BYTE
+//                        ByteArrayOutputStream BoutputStream = new ByteArrayOutputStream();
+//                        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, BoutputStream);
+//                        byte[] byteArray = BoutputStream.toByteArray();
+//                        img = byteArray;
+//                        TextView textView_aChar = findViewById(R.id.id_textView_wImg_Null);
+//                        aChar = title.charAt(0);
+//
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                contentValues.put("img", new byte[]{});
+//                                database.update("ghichu",contentValues, "id= ?", new String[]{id + ""});
+//                                textView_aChar.setText(String.valueOf(aChar));
+//                                setAlarm(title, content, DayAlert, time, img);
+//                            }
+//                        });
+//                    }
+//                }).start();
+//            }
+//
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
@@ -275,8 +425,8 @@ public class Detail_Activity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CHOOSE_PHOTO) {
                 try {
-                    uri = data.getData();
                     Uri imgURI = data.getData();
+                    uri = imgURI;
                     InputStream is = getContentResolver().openInputStream(imgURI);
                     Bitmap bitmap = BitmapFactory.decodeStream(is);
                     imageView_img_dd.setImageBitmap(bitmap);
@@ -301,7 +451,7 @@ public class Detail_Activity extends AppCompatActivity {
 
 
     private boolean isEmpty() {
-        if (editText_title.getText().toString().isEmpty() || editText_content.getText().toString().isEmpty() || count == 0) {
+        if (editText_title.getText().toString().isEmpty() || editText_content.getText().toString().isEmpty() || flag == false) {
             return true;
         }
         return false;
@@ -347,13 +497,10 @@ public class Detail_Activity extends AppCompatActivity {
 
 
 
-    public void openDatePicker(View view) {
-        datePickerDialog.setTitle("Chọn ngày");
-//        datePickerDialog.getDatePicker();
-        datePickerDialog.show();
-    }
 
-    private String getCurrentTime(){
+
+
+    private String getCurrentTime() {
         String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
         String timeNow = currentTime;
         return timeNow;
@@ -431,17 +578,4 @@ public class Detail_Activity extends AppCompatActivity {
     }
 
 
-    public void popTimePicker(View view) {
-        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int selectHour, int selectMinute) {
-                hour = selectHour;
-                minute = selectMinute;
-                buttonTime.setText(format(Locale.getDefault(), "%02d:%02d", hour, minute));
-            }
-        };
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, hour, minute, true);
-        timePickerDialog.setTitle("Chọn giờ");
-        timePickerDialog.show();
-    }
 }

@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putString("day", list.get(i).getTextV_day());
                 bundle.putString("updatetime", list.get(i).getTextV_updateTime());
 
-                Log.d("UPDATE", list.get(i).getTextV_updateTime());
+//                Log.d("UPDATE", list.get(i).getTextV_updateTime());
 
 // Lỗi do không bundle được ảnh null. Đã fix
                 if (list.get(i).getImg_font().length > 0) {

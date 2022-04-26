@@ -2,14 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="14dp"
+
     >
 
     <RelativeLayout
-        android:layout_marginStart="14dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/rlvIMG"
-        android:layout_width="125px"
-        android:layout_height="125px">
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        >
 
         <ImageView
             android:id="@+id/id_img_dd"
@@ -19,24 +20,25 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_image" />
 
-            <include
-                android:id="@+id/id_img_null"
-                layout="@layout/img_when_null"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"></include>
+        <include
+            android:id="@+id/id_img_null"
+            layout="@layout/img_when_null"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"></include>
 
     </RelativeLayout>
 
 
     <TextView
+        android:layout_marginTop="10dp"
         android:id="@+id/id_textV_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/rlvIMG"
+        android:padding="3dp"
         android:singleLine="true"
-        android:padding="5dp"
         android:text="@string/one_note_demo_tile"
         android:textColor="@color/black"
         android:textStyle="bold" />
@@ -45,11 +47,11 @@
         android:id="@+id/id_textV_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true"
         android:layout_below="@+id/id_textV_title"
         android:layout_marginLeft="15dp"
+        android:padding="3dp"
         android:layout_toRightOf="@+id/rlvIMG"
-        android:padding="5dp"
+        android:singleLine="true"
         android:text="@string/one_note_demo_content"
         android:textColor="#333" />
 
@@ -60,7 +62,7 @@
         android:layout_below="@+id/id_textV_content"
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/rlvIMG"
-        android:padding="15dp"
+        android:padding="10dp"
         android:src="@drawable/ic_alarm_clock" />
 
 

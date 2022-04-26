@@ -46,7 +46,14 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="Alarm.AlarmBrodcast"/>
+        <receiver
+            android:name="Alarm.AlarmBrodcast"
+            android:permission="android.permission.INSTALL_PACKAGES"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
         <service android:name="Alarm.Music"
             android:enabled="true"/>
 

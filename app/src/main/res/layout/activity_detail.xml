@@ -93,9 +93,9 @@
         android:layout_toRightOf="@+id/id_rlv_img"
         android:enabled="false"
         android:hint="@string/one_note_demo_tile"
-        android:padding="10dp"
+        android:padding="5dp"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="19sp" />
 
     <EditText
         android:id="@+id/id_detail_content"
@@ -106,9 +106,9 @@
         android:layout_toRightOf="@+id/id_rlv_img"
         android:enabled="false"
         android:hint="@string/one_note_demo_content"
-        android:padding="10dp"
+        android:padding="5dp"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="16sp" />
 
     <RelativeLayout
         android:id="@+id/rlv_Clock"
@@ -116,7 +116,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/id_detail_content"
         android:layout_toRightOf="@+id/id_rlv_img"
-        android:padding="12dp"
+        android:padding="10dp"
         android:visibility="visible">
 
         <ImageView
@@ -135,7 +135,7 @@
             android:enabled="false"
             android:hint="@string/one_note_demo_day"
             android:padding="4dp"
-            android:textSize="20sp" />
+            android:textSize="17sp" />
 
 
         <androidx.appcompat.widget.AppCompatEditText
@@ -147,7 +147,7 @@
             android:enabled="false"
             android:hint="@string/one_note_demo_time"
             android:padding="4dp"
-            android:textSize="20sp" />
+            android:textSize="17sp" />
 
 
         <TextView
@@ -211,7 +211,6 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:backgroundTint="@color/white"
                 android:id="@+id/id_btn_chonngay"
-                android:onClick="openDatePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"

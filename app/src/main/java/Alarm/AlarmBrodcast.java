@@ -13,18 +13,20 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
 
+import com.example.appnote_3.Add_Activity;
 import com.example.appnote_3.NotificationMessage;
 import com.example.appnote_3.R;
 
 import java.util.Calendar;
 
 public class AlarmBrodcast extends BroadcastReceiver {
-    private byte[] img;
+    private byte[] img = new byte[]{};
 
     private AlarmManager alarmManager;
     private Calendar calendar;
@@ -37,21 +39,21 @@ public class AlarmBrodcast extends BroadcastReceiver {
         String date = bundle.getString("day") + " " + bundle.getString("time");
         img = bundle.getByteArray("img");
 
+//        Log.e("CHECK_IMG_1", img+"");
 
 //        Click on Notification
         Intent intent1 = new Intent(context, NotificationMessage.class);
         intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent1.putExtra("message", title);
 
-        //
-//        Vibrator vibrator = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);
-//        vibrator.vibrate(10000);
-//
-////        Music
-//        Intent intentInReceiver = new Intent(context, Music.class);
-//        context.startService(intentInReceiver);
-//        PendingIntent pendingIntent1 = PendingIntent.getBroadcast(context, 0, intentInReceiver,PendingIntent.FLAG_UPDATE_CURRENT);
-//        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent1);
+
+        Vibrator vibrator = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);
+        vibrator.vibrate(15000);
+
+//        Music
+      Intent intentInReceiver = new Intent(context, Music.class);
+      context.startService(intentInReceiver);
+
 
         //Notification Builder
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, intent1, PendingIntent.FLAG_ONE_SHOT);
@@ -60,16 +62,14 @@ public class AlarmBrodcast extends BroadcastReceiver {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "notify_001");
 
 
-
         //here we set all the properties for the notification
         RemoteViews contentView = new RemoteViews(context.getPackageName(), R.layout.notification_layout);
-//        if (img.length >  0){
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
-//            contentView.setImageViewBitmap(R.id.id_img_view_notifi, bitmap);
-//        }else{
-//            contentView.setImageViewResource(R.id.id_img_view_notifi,R.mipmap.ic_launcher);
-//        }
-        contentView.setImageViewResource(R.id.id_img_view_notifi, R.mipmap.ic_launcher);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+        contentView.setImageViewBitmap(R.id.id_img_view_notifi, bitmap);
+
+//        contentView.setImageViewResource(R.id.id_img_view_notifi, R.mipmap.ic_launcher);
+
+
         PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
         contentView.setOnClickPendingIntent(R.id.flashButton, pendingSwitchIntent);
         contentView.setTextViewText(R.id.id_textV_title_notifi, title);

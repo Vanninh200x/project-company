@@ -26,6 +26,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -54,7 +56,7 @@ public class Add_Activity extends AppCompatActivity {
     private int hour, minute;
     private Uri uri = null;
 
-    private static int count = 0;
+    private boolean flag = false;
 
     private Calendar calendar = Calendar.getInstance();
     private final int year = calendar.get(Calendar.YEAR);
@@ -67,8 +69,7 @@ public class Add_Activity extends AppCompatActivity {
     private String TimeAlert;
 
     private byte[] img;
-
-
+    private char aChar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,9 +100,6 @@ public class Add_Activity extends AppCompatActivity {
 
 //        BTN_CHECK TO show Button
         img_icon_check.setOnClickListener(new View.OnClickListener() {
-
-            boolean flag = false;
-
             @Override
             public void onClick(View view) {
                 if (!flag) {
@@ -110,13 +108,11 @@ public class Add_Activity extends AppCompatActivity {
                     button_time.setVisibility(View.VISIBLE);
                     button_date.setText(getTodayDate());
                     button_time.setText(getCurrentTime1());
-                    count++;
                     flag = true;
                 } else {
                     img_icon_check.setImageResource(R.drawable.ic_checkbox_uncheck);
                     button_date.setVisibility(View.GONE);
                     button_time.setVisibility(View.GONE);
-                    count = 0;
                     flag = false;
                 }
             }
@@ -160,7 +156,7 @@ public class Add_Activity extends AppCompatActivity {
 
 
             ContentValues contentValues = new ContentValues();
-//        PUT dữ liệu
+            //PUT dữ liệu
             contentValues.put("title", title);
             contentValues.put("content", content);
             contentValues.put("day", day);
@@ -169,22 +165,47 @@ public class Add_Activity extends AppCompatActivity {
             if (uri != null) {
                 img = getByteArrayFromImageView(imgV_img_add);
                 contentValues.put("img", img);
-
-//            Log.d("CHECK_IMG" , im)
+                database.insert("ghichu", null, contentValues);
+                setAlarm(title, content, DayAlert, time, img);
             } else {
-//            Toast.makeText(this, "BBB", Toast.LENGTH_SHORT).show();
-                contentValues.put("img", new byte[]{});
-            }
-            database.insert("ghichu", null, contentValues);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        RelativeLayout layout = (RelativeLayout) findViewById(R.id.id_img_null_add);
+                        layout.setDrawingCacheEnabled(true);
+                        Bitmap bitmap = Bitmap.createBitmap(layout.getDrawingCache());
+                        layout.setDrawingCacheEnabled(false);
 
-//            Intent intent = new Intent(this, MainActivity.class);
-//            startActivity(intent);
-            setAlarm(title, content, DayAlert, time, img);
+                        //CONVERT BITMAP TO BYTE
+                        ByteArrayOutputStream BoutputStream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, BoutputStream);
+                        byte[] byteArray = BoutputStream.toByteArray();
+                        img = byteArray;
+                        TextView textView_aChar = findViewById(R.id.id_textView_wImg_Null);
+                        aChar = title.charAt(0);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                contentValues.put("img", new byte[]{});
+                                database.insert("ghichu", null, contentValues);
+                                textView_aChar.setText(String.valueOf(aChar));
+                                String S = textView_aChar.getText().toString().trim();
+                                setAlarm(title, content, DayAlert, time, img);
+                            }
+                        });
+                    }
+                }).start();
+            }
+
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         }
     }
 
     //    SET ALARM
     private void setAlarm(String title, String content, String day, String time, byte[] img) {
+
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);                   //assigining alaram manager object to set alaram
 
         Intent intent = new Intent(getApplicationContext(), AlarmBrodcast.class);
@@ -194,23 +215,26 @@ public class Add_Activity extends AppCompatActivity {
         intent.putExtra("time", time);
         intent.putExtra("img", img);
 
+        Log.e("CHECK_TI", title);
+
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
         String dateandtime = day + " " + timeTonotify;
-        Log.d("KIEMTRA", dateandtime);
-        Log.e("CHECK_IMG", img+ "");
+//        Log.d("KIEMTRA", dateandtime);
+//        Log.e("CHECK_IMG", img + "");
         DateFormat formatter = new SimpleDateFormat("d-M-yyyy hh:mm");
         try {
             Date date1 = formatter.parse(dateandtime);
-            Log.d("KIEMTRA_1", date1.toString());
+//            Log.d("KIEMTRA_1", date1.toString());
             am.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
-            Toast.makeText(getApplicationContext(), "Alarm", Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(getApplicationContext(), "Adding Success", Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        Intent intentBack = new Intent(getApplicationContext(), MainActivity.class);                //this intent will be called once the setting alaram is completes
+        Intent intentBack = new Intent(getApplicationContext(), MainActivity.class);
         intentBack.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intentBack);                                                                  //navigates from adding reminder activity ot mainactivity
+        startActivity(intentBack);
     }
 
 
@@ -227,7 +251,7 @@ public class Add_Activity extends AppCompatActivity {
 
 
     private boolean isEmpty() {
-        if (editText_title.getText().toString().isEmpty() || editText_content.getText().toString().isEmpty() || count == 0) {
+        if (editText_title.getText().toString().isEmpty() || editText_content.getText().toString().isEmpty() || flag == false) {
             return true;
         }
         return false;
@@ -318,7 +342,7 @@ public class Add_Activity extends AppCompatActivity {
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
                 timeTonotify = i + ":" + i1;                                                        //temp variable to store the time to set alarm
                 button_time.setText(String.format(Locale.getDefault(), "%02d:%02d", i, i1));
-                TimeAlert = i+":"+i1;
+                TimeAlert = i + ":" + i1;
             }
         }, hour, minute, false);
         timePickerDialog.show();
@@ -442,8 +466,6 @@ public class Add_Activity extends AppCompatActivity {
     public void openDatePicker(View view) {
         datePickerDialog.setTitle("Chọn ngày");
         datePickerDialog.show();
-
-
     }
 
     private void selectDate() {                                                                     //this method performs the date picker task
@@ -456,7 +478,7 @@ public class Add_Activity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 button_date.setText(day + " Tháng " + (month + 1) + " " + year);//sets the selected date as test for button
                 DayAlert = day + "-" + (month + 1) + "-" + year;
-                Log.d("KIEMTRA", DayAlert);
+//                Log.d("KIEMTRA", DayAlert);
             }
 
         }, year, month, day);

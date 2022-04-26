@@ -103,6 +103,8 @@
 
         <ListView
             android:id="@+id/id_list_View"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/id_framelayout_1"

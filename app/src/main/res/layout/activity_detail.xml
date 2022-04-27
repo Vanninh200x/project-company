@@ -89,26 +89,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/id_rela_layout"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginEnd="12dp"
         android:layout_toRightOf="@+id/id_rlv_img"
         android:enabled="false"
         android:hint="@string/one_note_demo_tile"
-        android:padding="5dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
         android:textColor="@color/black"
-        android:textSize="19sp" />
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/id_detail_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/id_title_detail_ac"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="12dp"
         android:layout_toRightOf="@+id/id_rlv_img"
         android:enabled="false"
         android:hint="@string/one_note_demo_content"
-        android:padding="5dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="15sp" />
 
     <RelativeLayout
         android:id="@+id/rlv_Clock"
@@ -116,38 +122,40 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/id_detail_content"
         android:layout_toRightOf="@+id/id_rlv_img"
-        android:padding="10dp"
+        android:padding="15dp"
         android:visibility="visible">
 
         <ImageView
             android:id="@+id/id_imgV_clock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp"
+            android:padding="14dp"
             android:src="@drawable/ic_alarm_clock" />
 
 
-        <androidx.appcompat.widget.AppCompatEditText
+        <TextView
             android:id="@+id/id_detail_day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/id_imgV_clock"
-            android:enabled="false"
             android:hint="@string/one_note_demo_day"
-            android:padding="4dp"
-            android:textSize="17sp" />
+            android:textSize="15sp" />
 
 
-        <androidx.appcompat.widget.AppCompatEditText
+        <TextView
             android:id="@+id/id_detail_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/id_detail_day"
             android:layout_toRightOf="@+id/id_imgV_clock"
-            android:enabled="false"
             android:hint="@string/one_note_demo_time"
-            android:padding="4dp"
-            android:textSize="17sp" />
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/id_imgV_clock"
+            android:background="@color/Color_under_title" />
 
 
         <TextView
@@ -155,9 +163,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/id_detail_time"
+            android:layout_alignParentEnd="true"
             android:layout_marginTop="18dp"
             android:clickable="false"
-            android:layout_alignParentEnd="true"
             android:gravity="start"
             android:hint="@string/detail_more_update_info"
             android:textColor="@color/black"
@@ -173,36 +181,45 @@
         android:layout_toRightOf="@+id/id_rlv_img"
         android:visibility="gone">
 
-        <FrameLayout
+        <RelativeLayout
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_marginStart="2dp"
             android:id="@+id/id_framelayout_1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:layout_marginStart="10dp"
+            <TextView
                 android:id="@+id/id_edit_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/id_rela_layout"
-                android:enabled="false"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="10dp"
                 android:text="@string/editText_Time"
-                android:textColor="@color/black" />
+                android:textSize="15sp" />
 
             <ImageView
-                android:layout_marginEnd="5dp"
                 android:id="@+id/id_imgV_uncheck_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="12dp"
+                android:layout_marginEnd="10dp"
+                android:layout_alignParentEnd="true"
                 android:src="@drawable/ic_checkbox_uncheck" />
 
-        </FrameLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/id_imgV_uncheck_1"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/Color_under_title" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_below="@id/id_framelayout_1"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="15dp"
             android:weightSum="10"
             android:layout_width="match_parent"
             android:orientation="horizontal"
@@ -219,7 +236,6 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/id_btn_chongio"
-                android:onClick="popTimePicker"
                 android:backgroundTint="@color/white"
                 android:text="@string/button_chongio"
                 android:textAllCaps="false"

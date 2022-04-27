@@ -55,7 +55,7 @@ public class Detail_Activity extends AppCompatActivity {
     private final int REQUEST_CHOOSE_PHOTO = 123;
     private ImageView imageView_back, imageView_more, imageView_img_dd, imageView_clock, imageView_done, imageView_unCheck_detail;
     private EditText editText_title, editText_content, editText_time, editText_day;
-    private TextView textView_update_info, textView_title_detail_edit, textView_title_img_null;
+    private TextView textView_update_info, textView_title_detail_edit, textView_title_img_null, textView_time, textView_day, textView_clock;
     private EditText editText_clock;
     private RelativeLayout rlvClock, rlvChecktime, rlv_img_parent, rlv_img_null;
     private Button buttonTime, buttonDay;
@@ -109,8 +109,8 @@ public class Detail_Activity extends AppCompatActivity {
 //            Lỗi không có ảnh ? => ko decode => Length NULL: 14/4 Fix 19/4
             editText_title.setText(title);
             editText_content.setText(content);
-            editText_day.setText(day);
-            editText_time.setText(time);
+            textView_day.setText(day);
+            textView_time.setText(time);
             textView_update_info.setText("Cập nhật lần cuối: " + updatetime);
         }
 
@@ -146,12 +146,12 @@ public class Detail_Activity extends AppCompatActivity {
                                 imageView_unCheck_detail.setImageResource(R.drawable.ic_checkbox_uncheck);
                                 buttonTime.setVisibility(View.GONE);
                                 buttonDay.setVisibility(View.GONE);
-                                buttonTime.setText(editText_time.getText().toString());
-                                buttonDay.setText(editText_day.getText().toString());
+                                buttonTime.setText(textView_time.getText().toString());
+                                buttonDay.setText(textView_day.getText().toString());
                                 editText_title.setEnabled(true);
                                 editText_content.setEnabled(true);
-                                editText_clock.setEnabled(true);
-                                editText_clock.setFocusable(false);
+//                                editText_clock.setEnabled(true);
+//                                editText_clock.setFocusable(false);
                                 textView_title_detail_edit.setText("Sửa ghi chú");
 
 //                              ImgageDD Click
@@ -474,8 +474,13 @@ public class Detail_Activity extends AppCompatActivity {
 
         editText_title = findViewById(R.id.id_title_detail_ac);
         editText_content = findViewById(R.id.id_detail_content);
-        editText_time = findViewById(R.id.id_detail_time);
-        editText_day = findViewById(R.id.id_detail_day);
+//        editText_time = findViewById(R.id.id_detail_time);
+//        editText_time.setBackgroundResource(android.R.color.transparent);
+//        editText_day = findViewById(R.id.id_detail_day);
+//        editText_day.setBackgroundResource(android.R.color.transparent);
+        textView_time = findViewById(R.id.id_detail_time);
+        textView_day = findViewById(R.id.id_detail_day);
+
 
         textView_update_info = findViewById(R.id.id_detail_update_info);
         textView_title_detail_edit = findViewById(R.id.id_tvTitle_AC_detail);
@@ -484,8 +489,10 @@ public class Detail_Activity extends AppCompatActivity {
         rlvClock = findViewById(R.id.rlv_Clock);
         rlvChecktime = findViewById(R.id.rlv_CheckTime);
 
-        editText_clock = findViewById(R.id.id_edit_time);
+//        editText_clock = findViewById(R.id.id_edit_time);
 //        Set Color
+
+        textView_clock = findViewById(R.id.id_edit_time);
 
         imageView_clock.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
         imageView_back.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
@@ -512,7 +519,7 @@ public class Detail_Activity extends AppCompatActivity {
         int month = calendar.get(Calendar.MONTH);
         month = month + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        return makeDateString(day, month, year);
+        return makeDateString(year, month, day);
     }
 
 

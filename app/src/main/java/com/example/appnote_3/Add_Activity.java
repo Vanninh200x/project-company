@@ -7,9 +7,11 @@ import android.app.DatePickerDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.app.WallpaperManager;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -171,32 +173,37 @@ public class Add_Activity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        TextView textView_aChar = findViewById(R.id.id_textView_wImg_Null);
                         RelativeLayout layout = (RelativeLayout) findViewById(R.id.id_img_null_add);
                         layout.setDrawingCacheEnabled(true);
                         Bitmap bitmap = Bitmap.createBitmap(layout.getDrawingCache());
                         layout.setDrawingCacheEnabled(false);
 
                         //CONVERT BITMAP TO BYTE
-                        ByteArrayOutputStream BoutputStream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, BoutputStream);
-                        byte[] byteArray = BoutputStream.toByteArray();
-                        img = byteArray;
-                        TextView textView_aChar = findViewById(R.id.id_textView_wImg_Null);
+//                        ByteArrayOutputStream BoutputStream = new ByteArrayOutputStream();
+//                        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, BoutputStream);
+//                        byte[] byteArray = BoutputStream.toByteArray();
+//                        img = byteArray;
                         aChar = title.charAt(0);
+//                        Log.e("CHECK_achar", aChar +"");
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                textView_aChar.setText(String.valueOf(aChar));
+                                ByteArrayOutputStream BoutputStream = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, BoutputStream);
+                                byte[] byteArray = BoutputStream.toByteArray();
+                                img = byteArray;
                                 contentValues.put("img", new byte[]{});
                                 database.insert("ghichu", null, contentValues);
-                                textView_aChar.setText(String.valueOf(aChar));
-                                String S = textView_aChar.getText().toString().trim();
                                 setAlarm(title, content, DayAlert, time, img);
                             }
                         });
                     }
                 }).start();
             }
+
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
@@ -207,26 +214,37 @@ public class Add_Activity extends AppCompatActivity {
     private void setAlarm(String title, String content, String day, String time, byte[] img) {
 
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);                   //assigining alaram manager object to set alaram
+//
+//        Intent intent = new Intent(getApplicationContext(), AlarmBrodcast.class);
+//        intent.putExtra("title", title);                                                       //sending data to alarm class to create channel and notification
+//        intent.putExtra("content", content);
+//        intent.putExtra("day", day);
+//        intent.putExtra("time", time);
+//        intent.putExtra("img", img);
+//
 
+        //        LINE 2
+        Bundle extras = new Bundle();
         Intent intent = new Intent(getApplicationContext(), AlarmBrodcast.class);
-        intent.putExtra("title", title);                                                       //sending data to alarm class to create channel and notification
-        intent.putExtra("content", content);
-        intent.putExtra("day", day);
-        intent.putExtra("time", time);
-        intent.putExtra("img", img);
+        extras.putString("title",title);
+        extras.putString("content", content);
+        extras.putString("day",day);
+        extras.putString("time",time);
+        extras.putByteArray("img",img);
+        intent.putExtras(extras);
 
         Log.e("CHECK_TI", title);
 
+
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
         String dateandtime = day + " " + timeTonotify;
-//        Log.d("KIEMTRA", dateandtime);
-//        Log.e("CHECK_IMG", img + "");
+
+        Log.e("CHECK_IMG", img + "");
         DateFormat formatter = new SimpleDateFormat("d-M-yyyy hh:mm");
         try {
             Date date1 = formatter.parse(dateandtime);
 //            Log.d("KIEMTRA_1", date1.toString());
             am.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
-
             Toast.makeText(getApplicationContext(), "Adding Success", Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
             e.printStackTrace();
@@ -235,6 +253,8 @@ public class Add_Activity extends AppCompatActivity {
         Intent intentBack = new Intent(getApplicationContext(), MainActivity.class);
         intentBack.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intentBack);
+
+
     }
 
 

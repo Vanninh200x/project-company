@@ -1,6 +1,6 @@
 package Alarm;
 
-import android.app.AlarmManager;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -12,24 +12,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
-import android.util.Log;
-import android.view.View;
 import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
 
-import com.example.appnote_3.Add_Activity;
 import com.example.appnote_3.NotificationMessage;
 import com.example.appnote_3.R;
 
-import java.util.Calendar;
+
 
 public class AlarmBrodcast extends BroadcastReceiver {
     private byte[] img = new byte[]{};
 
-    private AlarmManager alarmManager;
-    private Calendar calendar;
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -46,18 +40,13 @@ public class AlarmBrodcast extends BroadcastReceiver {
         intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent1.putExtra("message", title);
 
-
-        Vibrator vibrator = (Vibrator) context.getSystemService(context.VIBRATOR_SERVICE);
-        vibrator.vibrate(15000);
-
-//        Music
-      Intent intentInReceiver = new Intent(context, Music.class);
-      context.startService(intentInReceiver);
+//      Music
+        Intent intentInReceiver = new Intent(context, Music.class);
+        context.startService(intentInReceiver);
 
 
         //Notification Builder
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, intent1, PendingIntent.FLAG_ONE_SHOT);
-
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, "notify_001");
 
@@ -71,6 +60,7 @@ public class AlarmBrodcast extends BroadcastReceiver {
 
 
         PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+//        contentView.setOnClickFillInIntent(R.id.flashButton, pendingSwitchIntent);
         contentView.setOnClickPendingIntent(R.id.flashButton, pendingSwitchIntent);
         contentView.setTextViewText(R.id.id_textV_title_notifi, title);
         contentView.setTextViewText(R.id.id_textV_time_and_day_notifi, content);
@@ -94,9 +84,19 @@ public class AlarmBrodcast extends BroadcastReceiver {
         }
 
         Notification notification = mBuilder.build();
-        notificationManager.notify(1, notification);
-
-
+        notificationManager.notify( 1, notification);
     }
+
+//
+//
+//
+//    LINE 2
+
+//    @Override
+//    public void onReceive(Context context, Intent intent) {
+//
+//    }
+
+
 
 }

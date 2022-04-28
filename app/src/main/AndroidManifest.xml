@@ -55,14 +55,15 @@
 <!--            </intent-filter>-->
 <!--        </receiver>-->
 
-        <receiver android:name="Alarm.AlarmBrodcast" android:exported="true">
+<!--        <receiver android:name="Alarm.AlarmBrodcast" android:exported="true" />-->
+
+        <receiver android:name="Alarm.AlarmBrodcast"
+            android:enabled="true"
+            android:exported="true"
+            android:label="BootReceiver">
             <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="Alarm.AlarmBrodcast" android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+
             </intent-filter>
         </receiver>
 

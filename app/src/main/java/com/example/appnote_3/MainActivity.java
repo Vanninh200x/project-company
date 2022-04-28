@@ -284,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void read() {
-        Cursor cursor = database.rawQuery("SELECT*FROM ghichu", null);
+        Cursor cursor = database.rawQuery("SELECT*FROM ghichu ORDER BY id DESC", null);
         for (int i = 0; i < cursor.getCount(); i++) {
             cursor.moveToPosition(i);
             id = cursor.getInt(0);

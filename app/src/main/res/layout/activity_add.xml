@@ -136,18 +136,22 @@
       <androidx.appcompat.widget.AppCompatButton
           android:backgroundTint="@color/white"
           android:id="@+id/id_btn_chonngay"
+          android:textStyle="bold"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_weight="5"
           android:text="@string/button_chonngay"
+          android:textColor="@color/Color_Default"
           android:textAllCaps="false" />
 
       <androidx.appcompat.widget.AppCompatButton
           android:id="@+id/id_btn_chongio"
           android:backgroundTint="@color/white"
           android:text="@string/button_chongio"
+          android:textStyle="bold"
           android:textAllCaps="false"
           android:layout_width="wrap_content"
+          android:textColor="@color/Color_Default"
           android:layout_weight="5"
           android:layout_height="wrap_content"/>
 

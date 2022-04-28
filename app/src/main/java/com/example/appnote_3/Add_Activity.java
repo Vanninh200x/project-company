@@ -72,6 +72,7 @@ public class Add_Activity extends AppCompatActivity {
 
     private byte[] img;
     private char aChar;
+    private Bitmap bitmap_1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +109,8 @@ public class Add_Activity extends AppCompatActivity {
                     img_icon_check.setImageResource(R.drawable.ic_checkbox_checked);
                     button_date.setVisibility(View.VISIBLE);
                     button_time.setVisibility(View.VISIBLE);
-                    button_date.setText(getTodayDate());
-                    button_time.setText(getCurrentTime1());
+//                    button_date.setText(getTodayDate());
+//                    button_time.setText(getCurrentTime1());
                     flag = true;
                 } else {
                     img_icon_check.setImageResource(R.drawable.ic_checkbox_uncheck);
@@ -159,6 +160,7 @@ public class Add_Activity extends AppCompatActivity {
 
             ContentValues contentValues = new ContentValues();
             //PUT dữ liệu
+//            contentValues.put("id",id);
             contentValues.put("title", title);
             contentValues.put("content", content);
             contentValues.put("day", day);
@@ -168,36 +170,33 @@ public class Add_Activity extends AppCompatActivity {
                 img = getByteArrayFromImageView(imgV_img_add);
                 contentValues.put("img", img);
                 database.insert("ghichu", null, contentValues);
-                setAlarm(title, content, DayAlert, time, img);
+                setAlarm(title, content, DayAlert, TimeAlert, img);
             } else {
+                aChar = title.charAt(0);
+                TextView textView_aChar = findViewById(R.id.id_textView_wImg_Null);
+                textView_aChar.setText(String.valueOf(aChar));
+//                KO duoc giao tiep voi giao dien
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        TextView textView_aChar = findViewById(R.id.id_textView_wImg_Null);
                         RelativeLayout layout = (RelativeLayout) findViewById(R.id.id_img_null_add);
                         layout.setDrawingCacheEnabled(true);
-                        Bitmap bitmap = Bitmap.createBitmap(layout.getDrawingCache());
+                        bitmap_1 = Bitmap.createBitmap(layout.getDrawingCache());
                         layout.setDrawingCacheEnabled(false);
-
                         //CONVERT BITMAP TO BYTE
-//                        ByteArrayOutputStream BoutputStream = new ByteArrayOutputStream();
-//                        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, BoutputStream);
-//                        byte[] byteArray = BoutputStream.toByteArray();
-//                        img = byteArray;
-                        aChar = title.charAt(0);
 //                        Log.e("CHECK_achar", aChar +"");
 
+//                        THAO tac voi giao dien
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                textView_aChar.setText(String.valueOf(aChar));
                                 ByteArrayOutputStream BoutputStream = new ByteArrayOutputStream();
-                                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, BoutputStream);
+                                bitmap_1.compress(Bitmap.CompressFormat.JPEG, 50, BoutputStream);
                                 byte[] byteArray = BoutputStream.toByteArray();
                                 img = byteArray;
                                 contentValues.put("img", new byte[]{});
                                 database.insert("ghichu", null, contentValues);
-                                setAlarm(title, content, DayAlert, time, img);
+                                setAlarm(title, content, DayAlert, TimeAlert, img);
                             }
                         });
                     }
@@ -236,19 +235,21 @@ public class Add_Activity extends AppCompatActivity {
         Log.e("CHECK_TI", title);
 
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         String dateandtime = day + " " + timeTonotify;
 
-        Log.e("CHECK_IMG", img + "");
+//        Log.e("CHECK_IMG", img + "");
         DateFormat formatter = new SimpleDateFormat("d-M-yyyy hh:mm");
         try {
             Date date1 = formatter.parse(dateandtime);
 //            Log.d("KIEMTRA_1", date1.toString());
-            am.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
+//            am.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
+            am.setExact(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
             Toast.makeText(getApplicationContext(), "Adding Success", Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
 
         Intent intentBack = new Intent(getApplicationContext(), MainActivity.class);
         intentBack.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -271,7 +272,8 @@ public class Add_Activity extends AppCompatActivity {
 
 
     private boolean isEmpty() {
-        if (editText_title.getText().toString().isEmpty() || editText_content.getText().toString().isEmpty() || flag == false) {
+        if (editText_title.getText().toString().isEmpty() || editText_content.getText().toString().isEmpty() || flag == false
+        || button_date.getText().toString().equals("Chọn ngày") || button_time.getText().toString().equals("Chọn giờ")) {
             return true;
         }
         return false;
@@ -326,7 +328,7 @@ public class Add_Activity extends AppCompatActivity {
         int month = calendar.get(Calendar.MONTH);
         month = month + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        DayAlert = day + "-" + (month) + "-" + year;
+//        DayAlert = day + "-" + (month) + "-" + year;
         return makeDateString(day, month, year);
     }
 

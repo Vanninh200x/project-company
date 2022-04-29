@@ -44,5 +44,13 @@
     <string name="text_btn_login">Đăng nhập</string>
     <string name="menu_arrows_1">Arrows1</string>
     <string name="delete_all">Xóa tất cả</string>
+    <string name="buzz">BUZZ</string>
+    <string name="addFail">Tạo thất bại đề nghị nhập đầy đủ</string>
+    <string name="AddSuccess">Thêm thành công</string>
+    <string name="updatelastTime">Cập nhật lần cuối : </string>
+    <string name="shareUsing">Chia sẻ</string>
+    <string name="requestInputFull">Đề nghị nhập đầy đủ</string>
+    <string name="requestInputpass">Đề nghị nhập mật khẩu</string>
+    <string name="requestpasswdequal">Đề nghị nhập mật khẩu giống nhau</string>
 
 </resources>

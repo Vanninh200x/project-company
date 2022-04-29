@@ -73,6 +73,7 @@ public class Add_Activity extends AppCompatActivity {
     private byte[] img;
     private char aChar;
     private Bitmap bitmap_1;
+    private String dateandtime_1 = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +150,7 @@ public class Add_Activity extends AppCompatActivity {
     //        Insert
     private void insert() {
         if (isEmpty()) {
-            Toast.makeText(this, "Tạo thất bại đề nghị nhập đầy đủ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.addFail), Toast.LENGTH_SHORT).show();
         } else {
             String title = editText_title.getText().toString();
             String content = editText_content.getText().toString();
@@ -237,7 +238,8 @@ public class Add_Activity extends AppCompatActivity {
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         String dateandtime = day + " " + timeTonotify;
-
+        dateandtime_1 = dateandtime;
+        Log.e("CHECK_Date2", dateandtime_1);
 //        Log.e("CHECK_IMG", img + "");
         DateFormat formatter = new SimpleDateFormat("d-M-yyyy hh:mm");
         try {
@@ -245,7 +247,7 @@ public class Add_Activity extends AppCompatActivity {
 //            Log.d("KIEMTRA_1", date1.toString());
 //            am.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
             am.setExact(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
-            Toast.makeText(getApplicationContext(), "Adding Success", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.AddSuccess), Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -254,8 +256,6 @@ public class Add_Activity extends AppCompatActivity {
         Intent intentBack = new Intent(getApplicationContext(), MainActivity.class);
         intentBack.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intentBack);
-
-
     }
 
 
@@ -272,8 +272,10 @@ public class Add_Activity extends AppCompatActivity {
 
 
     private boolean isEmpty() {
+
         if (editText_title.getText().toString().isEmpty() || editText_content.getText().toString().isEmpty() || flag == false
-        || button_date.getText().toString().equals("Chọn ngày") || button_time.getText().toString().equals("Chọn giờ")) {
+        || button_date.getText().toString().equals("Chọn ngày") || button_time.getText().toString().equals("Chọn giờ")
+         ) {
             return true;
         }
         return false;
@@ -336,24 +338,10 @@ public class Add_Activity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, REQUEST_CHOOSE_PHOTO);
-        startActivityForResult(intent, REQUEST_CHOOSE_PHOTO);
     }
 
 
-//    public void selectTime(View view) {
-//        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
-//            @Override
-//            public void onTimeSet(TimePicker timePicker, int selectHour, int selectMinute) {
-//                hour = selectHour;
-//                minute = selectMinute;
-//                button_time.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
-//            }
-//        };
-//        TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, hour, minute, true);
-//        timePickerDialog.setTitle("Chọn giờ");
-//        timePickerDialog.show();
-//
-//    }
+
 
     private void selectTime() {                                                                     //this method performs the time picker task
         Calendar calendar = Calendar.getInstance();
@@ -369,22 +357,6 @@ public class Add_Activity extends AppCompatActivity {
         }, hour, minute, false);
         timePickerDialog.show();
     }
-//
-//    private void selectDate() {                                                                     //this method performs the date picker task
-//        Calendar calendar = Calendar.getInstance();
-//        int year = calendar.get(Calendar.YEAR);
-//        int month = calendar.get(Calendar.MONTH);
-//        int day = calendar.get(Calendar.DAY_OF_MONTH);
-//        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-//            @Override
-//            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-//                button_date.setText(day + " Tháng " + (month + 1) + " " + year);//sets the selected date as test for button
-//                DayAlert = day + "-" + (month + 1) + "-"+ year;
-//            }
-//
-//        }, year, month, day);
-//        datePickerDialog.show();
-//    }
 
 
     public String FormatTime(int hour, int minute) {                                                //this method converts the time into 12hr farmat and assigns am or pm
@@ -485,10 +457,6 @@ public class Add_Activity extends AppCompatActivity {
         return "Tháng 1";
     }
 
-    public void openDatePicker(View view) {
-        datePickerDialog.setTitle("Chọn ngày");
-        datePickerDialog.show();
-    }
 
     private void selectDate() {                                                                     //this method performs the date picker task
         Calendar calendar = Calendar.getInstance();
@@ -504,6 +472,7 @@ public class Add_Activity extends AppCompatActivity {
             }
 
         }, year, month, day);
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
     }
 

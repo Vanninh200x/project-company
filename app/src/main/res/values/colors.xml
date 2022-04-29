@@ -11,4 +11,5 @@
     <color name="Color_img">#9A9A9A</color>
     <color name="Color_under_title">#EEEEEE</color>
     <color name="Color_title">#555555</color>
+    <color name="underLine">#C2C2C2</color>
 </resources>

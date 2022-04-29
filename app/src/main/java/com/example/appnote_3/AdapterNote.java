@@ -81,7 +81,7 @@ public class AdapterNote extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
-        holder.imageView_clock.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
+        holder.imageView_clock.setColorFilter(Color.parseColor("#999999"), PorterDuff.Mode.SRC_IN);
         oneNote_class note = list_oneNote.get(i);
         holder.textView_title.setText(note.getTextV_title());
         holder.textView_content.setText(note.getTextV_content());

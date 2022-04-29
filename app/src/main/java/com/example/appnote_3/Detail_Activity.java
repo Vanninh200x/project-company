@@ -111,7 +111,7 @@ public class Detail_Activity extends AppCompatActivity {
             editText_content.setText(content);
             textView_day.setText(day);
             textView_time.setText(time);
-            textView_update_info.setText("Cập nhật lần cuối: " + updatetime);
+            textView_update_info.setText(getString(R.string.updatelastTime) + updatetime);
         }
 
 
@@ -135,7 +135,7 @@ public class Detail_Activity extends AppCompatActivity {
                             case R.id.id_item_menu_share:
                                 Intent intent1 = new Intent(Intent.ACTION_SEND);
                                 intent1.setType("text/plain");
-                                startActivity(Intent.createChooser(intent1, "Share Using"));
+                                startActivity(Intent.createChooser(intent1, getString(R.string.shareUsing)));
                                 break;
 
                             case R.id.id_item_menu_edit:
@@ -200,7 +200,7 @@ public class Detail_Activity extends AppCompatActivity {
                                     @Override
                                     public void onClick(View view) {
                                         update();
-                                        Log.d("CHECK_T", getTodayDate() + " " + getCurrentTime());
+//                                        Log.d("CHECK_T", getTodayDate() + " " + getCurrentTime());
 
                                     }
                                 });
@@ -234,6 +234,7 @@ public class Detail_Activity extends AppCompatActivity {
     }
 
 
+//    Đã từng thử nhưng thất bại chưa giải quyết được.
     private void setAlarm(String title, String content, String day, String time, byte[] img) {
 
         AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);                   //assigining alaram manager object to set alaram
@@ -245,7 +246,7 @@ public class Detail_Activity extends AppCompatActivity {
         intent.putExtra("time", time);
         intent.putExtra("img", img);
 
-        Log.e("CHECK_TI", title);
+//        Log.e("CHECK_TI", title);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
         String dateandtime = day + " " + timeTonotify;
@@ -323,13 +324,14 @@ public class Detail_Activity extends AppCompatActivity {
             }
 
         }, year, month, day);
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         datePickerDialog.show();
     }
 
 
     private void update() {
         if (isEmpty()) {
-            Toast.makeText(this, "Đề nghị nhập đầy đủ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.requestInputFull), Toast.LENGTH_SHORT).show();
         } else {
 
             String title = editText_title.getText().toString();
@@ -341,7 +343,6 @@ public class Detail_Activity extends AppCompatActivity {
             ContentValues contentValues = new ContentValues();
 //            contentValues.put("id", id);
             contentValues.put("title", title);
-            Log.d("CHECK_TITLE", title);
             contentValues.put("content", content);
             contentValues.put("day", day);
             contentValues.put("time", time);
@@ -494,7 +495,8 @@ public class Detail_Activity extends AppCompatActivity {
 
         textView_clock = findViewById(R.id.id_edit_time);
 
-        imageView_clock.setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
+        textView_update_info.setTextColor(Color.parseColor("#999999"));
+        imageView_clock.setColorFilter(Color.parseColor("#999999"), PorterDuff.Mode.SRC_IN);
         imageView_back.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
         imageView_more.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
         imageView_unCheck_detail.setColorFilter(Color.parseColor("#686EFE"), PorterDuff.Mode.SRC_IN);
@@ -537,6 +539,9 @@ public class Detail_Activity extends AppCompatActivity {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+
+
         datePickerDialog = new DatePickerDialog(this, onDateSetListener, year, month, day);
     }
 

@@ -53,8 +53,8 @@
 
   <ImageView
       android:id="@+id/id_imgV_anh"
-      android:layout_width="125px"
-      android:layout_height="125px"
+      android:layout_width="55dp"
+      android:layout_height="55dp"
       android:layout_below="@id/id_rela_layout"
       android:layout_marginStart="16dp"
       android:layout_marginTop="10dp"
@@ -66,16 +66,15 @@
 
   <include
       android:id="@+id/id_img_null_add"
-      android:visibility="invisible"
-      android:layout_width="125px"
       layout="@layout/img_when_null"
-      android:layout_height="125px"
+      android:layout_width="55dp"
+      android:layout_height="55dp"
       android:layout_below="@id/id_rela_layout"
       android:layout_marginStart="16dp"
       android:layout_marginTop="10dp"
       android:layout_marginEnd="14dp"
-      android:layout_marginBottom="20dp">
-  </include>
+      android:layout_marginBottom="20dp"
+      android:visibility="invisible"></include>
 
   <LinearLayout
       android:id="@+id/id_linearLayout_1"
@@ -87,13 +86,19 @@
       android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatEditText
+        android:layout_marginTop="10dp"
+        android:paddingTop="15dp"
+        android:paddingEnd="10dp"
+        android:layout_marginEnd="13dp"
         android:id="@+id/id_edt_title"
         android:hint="@string/editText_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:layout_weight="1"
+        android:paddingTop="15dp"
+        android:paddingEnd="10dp"
+        android:layout_marginEnd="13dp"
         android:id="@+id/id_edt_content"
         android:hint="@string/editText_NoiDung"
         android:layout_width="match_parent"
@@ -101,18 +106,18 @@
 
     <FrameLayout
         android:id="@+id/id_framelayout_1"
+        android:paddingTop="15dp"
+        android:paddingEnd="12dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/id_rela_layout"
-        >
+        android:layout_below="@id/id_rela_layout">
 
       <androidx.appcompat.widget.AppCompatEditText
           android:id="@+id/id_edit_time"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_below="@id/id_rela_layout"
-          android:enabled="false"
-          android:text="@string/editText_Time"
+          android:hint="@string/editText_Time"
           android:textColor="@color/black" />
 
       <ImageView
@@ -122,7 +127,6 @@
           android:layout_height="wrap_content"
           android:layout_gravity="end"
           android:layout_marginTop="12dp"
-
           android:src="@drawable/ic_checkbox_uncheck" />
 
     </FrameLayout>

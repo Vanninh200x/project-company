@@ -132,6 +132,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="30dp"
             android:text="@string/main_title"
+            android:textColor="@color/Color_title"
             android:textSize="20sp"
             android:textStyle="bold" />
 

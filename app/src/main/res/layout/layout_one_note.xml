@@ -6,11 +6,10 @@
     >
 
     <RelativeLayout
-        android:layout_marginTop="10dp"
         android:id="@+id/rlvIMG"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        >
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="10dp">
 
         <ImageView
             android:id="@+id/id_img_dd"
@@ -49,11 +48,20 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/id_textV_title"
         android:layout_marginLeft="15dp"
-        android:padding="3dp"
         android:layout_toRightOf="@+id/rlvIMG"
+        android:padding="3dp"
         android:singleLine="true"
         android:text="@string/one_note_demo_content"
         android:textColor="#333" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/id_textV_content"
+        android:layout_toRightOf="@+id/rlvIMG"
+        android:layout_marginStart="15dp"
+        android:background="@color/Color_under_title" />
+
 
     <ImageView
         android:id="@+id/id_imgV_clock"
@@ -61,17 +69,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/id_textV_content"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/rlvIMG"
         android:padding="10dp"
         android:src="@drawable/ic_alarm_clock" />
-
 
     <TextView
         android:id="@+id/id_textV_day"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/id_textV_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/id_imgV_clock"
         android:hint="@string/one_note_demo_day" />
@@ -82,7 +90,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/id_textV_day"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/id_imgV_clock"
         android:text="@string/one_note_demo_time" />
 

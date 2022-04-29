@@ -8,14 +8,6 @@
         android:layout_width="fill_parent"
         android:layout_height="100dp">
 
-        <Button
-            android:id="@+id/flashButton"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text="Snozz off" />
-
         <ImageView
             android:id="@+id/id_img_view_notifi"
             android:layout_width="100dp"
@@ -28,7 +20,7 @@
             android:src="@mipmap/ic_launcher" />
 
         <RelativeLayout
-            android:layout_toLeftOf="@id/flashButton"
+            android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

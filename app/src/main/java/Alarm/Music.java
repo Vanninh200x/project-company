@@ -25,8 +25,8 @@ public class Music extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "MUSIC START", Toast.LENGTH_SHORT).show();
-        mediaPlayer = MediaPlayer.create(this, R.raw.filemp3);
+        Toast.makeText(this, String.valueOf(R.string.buzz), Toast.LENGTH_SHORT).show();
+        mediaPlayer = MediaPlayer.create(this, R.raw.filealarm);
         mediaPlayer.start();
 
 

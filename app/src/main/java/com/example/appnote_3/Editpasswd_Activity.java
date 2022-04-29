@@ -61,18 +61,18 @@ public class Editpasswd_Activity extends AppCompatActivity {
         String passwd2 = editText_passwd2.getText().toString().trim();
 
         if (passwd1.isEmpty() && passwd2.isEmpty()) {
-            textInputLayout_1.setError("Đề nghị nhập mật khẩu");
-            textInputLayout_2.setError("Đề nghị nhập mật khẩu");
+            textInputLayout_1.setError(getString(R.string.requestInputpass));
+            textInputLayout_2.setError(getString(R.string.requestInputpass));
         }
 
         if (passwd1.isEmpty() && !passwd2.isEmpty()) {
-            textInputLayout_1.setError("Đề nghị nhập mật khẩu");
+            textInputLayout_1.setError(getString(R.string.requestInputpass));
             textInputLayout_2.setErrorEnabled(false);
         }
 
         if (!passwd1.equals(passwd2) && !passwd1.isEmpty()) {
             textInputLayout_1.setErrorEnabled(false);
-            textInputLayout_2.setError("Đề nghị nhập mật khẩu giống nhau");
+            textInputLayout_2.setError(getString(R.string.requestpasswdequal));
         }
 
         if (passwd1.equals(passwd2) && !passwd1.isEmpty()) {

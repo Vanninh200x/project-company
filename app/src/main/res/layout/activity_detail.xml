@@ -62,6 +62,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:layout_marginTop="20dp"
         android:layout_marginStart="14dp"
         android:id="@+id/id_rlv_img"
         android:layout_below="@+id/id_rela_layout"
@@ -70,27 +71,27 @@
 
         <ImageView
             android:id="@+id/id_img_detail"
-            android:layout_width="125px"
-            android:layout_height="125px"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:scaleType="centerCrop" />
 
         <include
             android:id="@+id/id_include_imgNull_detail"
             android:visibility="gone"
-            android:layout_width="125px"
+            android:layout_width="55dp"
             layout="@layout/img_when_null"
-            android:layout_height="125px"></include>
+            android:layout_height="55dp"></include>
 
     </RelativeLayout>
 
     <EditText
-
         android:id="@+id/id_title_detail_ac"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/id_rela_layout"
         android:layout_marginStart="15dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="12dp"
         android:layout_toRightOf="@+id/id_rlv_img"
         android:enabled="false"
@@ -125,6 +126,7 @@
         android:padding="15dp"
         android:visibility="visible">
 
+
         <ImageView
             android:id="@+id/id_imgV_clock"
             android:layout_width="wrap_content"
@@ -132,8 +134,8 @@
             android:padding="14dp"
             android:src="@drawable/ic_alarm_clock" />
 
-
         <TextView
+            android:layout_marginTop="5dp"
             android:id="@+id/id_detail_day"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -155,7 +157,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/id_imgV_clock"
-            android:background="@color/Color_under_title" />
+            android:layout_marginStart="3dp"
+            android:background="@color/underLine" />
 
 
         <TextView
@@ -165,7 +168,6 @@
             android:layout_below="@+id/id_detail_time"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="18dp"
-            android:clickable="false"
             android:gravity="start"
             android:hint="@string/detail_more_update_info"
             android:textColor="@color/black"
@@ -202,7 +204,7 @@
                 android:id="@+id/id_imgV_uncheck_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="12dp"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/ic_checkbox_uncheck" />
 
@@ -212,8 +214,8 @@
                 android:layout_below="@+id/id_imgV_uncheck_1"
                 android:layout_marginStart="17dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:background="@color/Color_under_title" />
+                android:layout_marginEnd="12dp"
+                android:background="@color/Color_title" />
 
         </RelativeLayout>
 
@@ -231,6 +233,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
+                android:textStyle="bold"
+                android:textColor="@color/Color_Default"
                 android:text="@string/button_chonngay"
                 android:textAllCaps="false"/>
 
@@ -240,6 +244,8 @@
                 android:text="@string/button_chongio"
                 android:textAllCaps="false"
                 android:layout_width="wrap_content"
+                android:textColor="@color/Color_Default"
+                android:textStyle="bold"
                 android:layout_weight="5"
                 android:layout_height="wrap_content"/>
 

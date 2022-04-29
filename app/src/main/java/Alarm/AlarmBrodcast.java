@@ -48,6 +48,8 @@ public class AlarmBrodcast extends BroadcastReceiver {
         intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent1.putExtra("message", title);
 
+
+
         //Notification Builder
 
 //        PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -60,31 +62,29 @@ public class AlarmBrodcast extends BroadcastReceiver {
         Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
         contentView.setImageViewBitmap(R.id.id_img_view_notifi, bitmap);
 
-//        contentView.setImageViewResource(R.id.id_img_view_notifi, R.mipmap.ic_launcher);
 
 
+//
 //        PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-        PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        pendingSwitchIntent.cancel();
-        contentView.setOnClickPendingIntent(R.id.flashButton, pendingSwitchIntent);
+//        PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+////        pendingSwitchIntent.cancel();
+//        contentView.setOnClickPendingIntent(R.id.flashButton, pendingSwitchIntent);
 
         contentView.setTextViewText(R.id.id_textV_title_notifi, title);
         contentView.setTextViewText(R.id.id_textV_time_and_day_notifi, content);
         contentView.setTextViewText(R.id.id_textV_time_and_day_notifi_2, date);
         mBuilder.setSmallIcon(R.drawable.ic_alarm_clock);
 //      MUSIC
-//        Uri defaultSoundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + mContext.getPackageName() + "/raw/mysound");
 
-//        Uri myUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ context.getPackageName() + "/raw/filemp3.mp3");
-//
+//        Đã thử nhưng ko thấy tiếng
+
 //        Log.e("CHECK_URI", myUri +"");
-//        mBuilder.setSound(myUri);
-//        mBuilder.setLights(Color.BLUE, 500, 500);
-//        mBuilder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        mBuilder.setSound(alarmSound);
+        mBuilder.setLights(Color.BLUE, 500, 500);
+        mBuilder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
 
 //      VRIBATE
-
-
 
         mBuilder.setAutoCancel(true);
         mBuilder.setOngoing(true);
